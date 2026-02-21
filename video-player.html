@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مشغل الفيديو - المنصة التعليمية</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --primary-dark: #4338ca;
+            --secondary-color: #10b981;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --gray-color: #6b7280;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+        
+        body {
+            background-color: #000;
+            color: white;
+            direction: rtl;
+            overflow-x: hidden;
+            height: 100vh;
+        }
+        
+        /* شريط الرأس */
+        .video-header {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-btn {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+        }
+        
+        .course-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .control-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        
+        /* الحاوية الرئيسية */
+        .video-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            height: calc(100vh - 80px);
+            margin-top: 80px;
+        }
+        
+        /* منطقة الفيديو */
+        .video-player-area {
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #educationalVideo {
+            width: 100%;
+            height: 100%;
+            max-height: calc(100vh - 80px);
+            object-fit: contain;
+            outline: none;
+        }
+        
+        /* عناصر التحكم */
+        .video-controls {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .video-wrapper:hover .video-controls {
+            opacity: 1;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.1s;
+        }
+        
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .left-controls, .right-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .control-btn-large {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .control-btn-large:hover {
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+        
+        .time-display {
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* الشريط الجانبي */
+        .video-sidebar {
+            background: rgba(20, 20, 20, 0.95);
+            padding: 1.5rem;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .lesson-header {
+            margin-bottom: 2rem;
+        }
+        
+        .lesson-header h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        .lesson-meta {
+            display: flex;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .lesson-description {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* قائمة الدروس */
+        .lessons-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .section-title h2 {
+            font-size: 1.2rem;
+            color: white;
+        }
+        
+        .lessons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .lesson-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .lesson-item.active {
+            background: rgba(79, 70, 229, 0.2);
+            border-color: var(--primary-color);
+        }
+        
+        .lesson-number {
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+        
+        .lesson-item.active .lesson-number {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .lesson-info {
+            flex: 1;
+        }
+        
+        .lesson-info h3 {
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+            color: white;
+        }
+        
+        .lesson-duration {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .lesson-status {
+            font-size: 0.9rem;
+        }
+        
+        .completed {
+            color: var(--secondary-color);
+        }
+        
+        /* المواد المساعدة */
+        .resources-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .resources-section h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .resources-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+        
+        .resource-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            text-decoration: none;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s;
+        }
+        
+        .resource-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .resource-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(79, 70, 229, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        /* طبقة الحماية */
+        .protection-layer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        /* العلامة المائية */
+        .watermark {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.9rem;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* رسائل الحماية */
+        .protection-message {
+            position: fixed;
+            top: 50%;
+            right: 50%;
+            transform: translate(50%, -50%);
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            z-index: 10001;
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .protection-message.show {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(50%, -40%); }
+            to { opacity: 1; transform: translate(50%, -50%); }
+        }
+        
+        /* شاشة البدء */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            cursor: pointer;
+        }
+        
+        .overlay-content {
+            text-align: center;
+        }
+        
+        .overlay-content i {
+            font-size: 5rem;
+            color: white;
+            margin-bottom: 1rem;
+            transition: transform 0.3s;
+        }
+        
+        .overlay-content:hover i {
+            transform: scale(1.1);
+        }
+        
+        .overlay-content p {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        /* شاشة التحميل */
+        .loading-screen {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 101;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* القائمة المنسدلة للجودة */
+        .quality-menu {
+            position: absolute;
+            bottom: 60px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 8px;
+            padding: 0.5rem 0;
+            min-width: 150px;
+            display: none;
+            z-index: 1001;
+        }
+        
+        .quality-menu.show {
+            display: block;
+        }
+        
+        .quality-option {
+            padding: 0.8rem 1.5rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quality-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .quality-option.active {
+            color: var(--primary-color);
+        }
+        
+        /* التجاوب */
+        @media (max-width: 1200px) {
+            .video-container {
+                grid-template-columns: 1fr 300px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .video-container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .video-sidebar {
+                position: fixed;
+                top: 80px;
+                right: -400px;
+                width: 400px;
+                height: calc(100vh - 80px);
+                transition: right 0.3s;
+                z-index: 1000;
+            }
+            
+            .video-sidebar.show {
+                right: 0;
+            }
+            
+            .toggle-sidebar {
+                display: block !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .video-header {
+                padding: 1rem;
+            }
+            
+            .course-title {
+                font-size: 1rem;
+            }
+            
+            .video-sidebar {
+                width: 100%;
+            }
+            
+            .control-btn-large {
+                font-size: 1.2rem;
+            }
+        }
+        
+        /* تخصيص عناصر الفيديو */
+        video::-webkit-media-controls {
+            display: none !important;
+        }
+        
+        video::-webkit-media-controls-enclosure {
+            display: none !important;
+        }
+        
+        video::-webkit-media-controls-panel {
+            display: none !important;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+    <!-- شريط الرأس -->
+    <header class="video-header">
+        <a href="course.html" class="back-btn">
+            <i class="fas fa-arrow-right"></i>
+            <span>العودة للدورة</span>
+        </a>
+        
+        <div class="course-title" id="courseTitle">دورة تطوير الويب - الدرس 1</div>
+        
+        <div class="header-controls">
+            <button class="control-btn" onclick="togglePlaybackSpeed()" title="سرعة التشغيل">
+                <i class="fas fa-tachometer-alt"></i>
+            </button>
+            <button class="control-btn toggle-sidebar" onclick="toggleSidebar()" style="display: none;">
+                <i class="fas fa-list"></i>
+            </button>
+            <button class="control-btn" onclick="toggleFullscreen()" title="ملء الشاشة">
+                <i class="fas fa-expand"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- الحاوية الرئيسية -->
+    <div class="video-container">
+        <!-- منطقة الفيديو -->
+        <div class="video-player-area">
+            <div class="video-wrapper" id="videoWrapper">
+                <!-- شاشة التحميل -->
+                <div class="loading-screen" id="loadingScreen">
+                    <div class="spinner"></div>
+                </div>
+                
+                <!-- شاشة البدء -->
+                <div class="video-overlay" id="videoOverlay">
+                    <div class="overlay-content">
+                        <i class="fas fa-play-circle"></i>
+                        <p>انقر للبدء</p>
+                    </div>
+                </div>
+                
+                <!-- الفيديو -->
+                <video id="educationalVideo" controls controlsList="nodownload noremoteplayback">
+                    <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                    متصفحك لا يدعم تشغيل الفيديو.
+                </video>
+                
+                <!-- عناصر التحكم -->
+                <div class="video-controls">
+                    <div class="progress-container" onclick="seekVideo(event)">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    
+                    <div class="controls-row">
+                        <div class="left-controls">
+                            <button class="control-btn-large" onclick="togglePlay()">
+                                <i class="fas fa-play" id="playIcon"></i>
+                            </button>
+                            
+                            <button class="control-btn-large" onclick="skipBackward()">
+                                <i class="fas fa-backward"></i>
+                            </button>
+                            
+                            <button class="control-btn-large" onclick="skipForward()">
+                                <i class="fas fa-forward"></i>
+                            </button>
+                            
+                            <div class="time-display">
+                                <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="right-controls">
+                            <button class="control-btn-large" onclick="toggleMute()">
+                                <i class="fas fa-volume-up" id="volumeIcon"></i>
+                            </button>
+                            
+                            <div class="volume-slider-container">
+                                <input type="range" min="0" max="100" value="100" class="volume-slider" 
+                                       id="volumeSlider" oninput="changeVolume(this.value)">
+                            </div>
+                            
+                            <button class="control-btn-large" onclick="toggleQualityMenu()">
+                                <i class="fas fa-cog"></i>
+                            </button>
+                            
+                            <button class="control-btn-large" onclick="toggleFullscreen()">
+                                <i class="fas fa-expand"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- العلامة المائية -->
+                <div class="watermark" id="watermark">
+                    منصتي التعليمية - الطالب: محمد أحمد
+                </div>
+            </div>
+            
+            <!-- قائمة الجودة -->
+            <div class="quality-menu" id="qualityMenu">
+                <div class="quality-option active" onclick="changeQuality('auto')">تلقائي</div>
+                <div class="quality-option" onclick="changeQuality('1080p')">1080p</div>
+                <div class="quality-option" onclick="changeQuality('720p')">720p</div>
+                <div class="quality-option" onclick="changeQuality('480p')">480p</div>
+            </div>
+        </div>
+        
+        <!-- الشريط الجانبي -->
+        <aside class="video-sidebar" id="videoSidebar">
+            <!-- معلومات الدرس -->
+            <div class="lesson-header">
+                <h1 id="lessonTitle">مقدمة في HTML</h1>
+                <div class="lesson-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i>
+                        <span id="lessonDuration">45:00</span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-eye"></i>
+                        <span id="viewsCount">1,234 مشاهدة</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-description" id="lessonDescription">
+                تعلم أساسيات لغة HTML لبناء هيكل صفحات الويب. في هذا الدرس ستتعلم كيفية إنشاء عناصر HTML الأساسية واستخدامها في بناء صفحات ويب متكاملة.
+            </div>
+            
+            <!-- قائمة الدروس -->
+            <div class="lessons-section">
+                <div class="section-title">
+                    <h2>دروس الدورة</h2>
+                    <div class="progress-indicator">
+                        <span>30% مكتمل</span>
+                    </div>
+                </div>
+                
+                <div class="lessons-list" id="lessonsList">
+                    <!-- سيتم تعبئة الدروس عبر JavaScript -->
+                </div>
+            </div>
+            
+            <!-- المواد المساعدة -->
+            <div class="resources-section">
+                <h2>المواد المساعدة</h2>
+                <div class="resources-list">
+                    <a href="#" class="resource-item" target="_blank">
+                        <div class="resource-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="resource-info">
+                            <h3>ملاحظات الدرس</h3>
+                            <p>PDF - 2.4 MB</p>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="resource-item" target="_blank">
+                        <div class="resource-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="resource-info">
+                            <h3>الشفرة المصدرية</h3>
+                            <p>ZIP - 1.8 MB</p>
+                        </div>
+                    </a>
+                    
+                    <a href="#" class="resource-item" target="_blank">
+                        <div class="resource-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="resource-info">
+                            <h3>تمارين الدرس</h3>
+                            <p>DOC - 850 KB</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- طبقة الحماية -->
+    <div class="protection-layer" id="protectionLayer"></div>
+    
+    <!-- رسالة الحماية -->
+    <div class="protection-message" id="protectionMessage">
+        <i class="fas fa-shield-alt"></i>
+        <div>
+            <h3>تنبيه أمني</h3>
+            <p>هذا المحتوى محمي ولا يسمح بتسجيله أو مشاركته</p>
+        </div>
+    </div>
+    
+    <script>
+        // بيانات تجريبية
+        const videoData = {
+            course: {
+                title: "دورة تطوير الويب المتكاملة",
+                instructor: "أحمد محمد"
+            },
+            currentLesson: {
+                id: 1,
+                title: "مقدمة في HTML",
+                description: "تعلم أساسيات لغة HTML لبناء هيكل صفحات الويب. في هذا الدرس ستتعلم كيفية إنشاء عناصر HTML الأساسية واستخدامها في بناء صفحات ويب متكاملة.",
+                duration: "45:00",
+                views: 1234,
+                videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+            },
+            lessons: [
+                {
+                    id: 1,
+                    title: "مقدمة في HTML",
+                    duration: "45:00",
+                    completed: true,
+                    preview: true
+                },
+                {
+                    id: 2,
+                    title: "أساسيات CSS",
+                    duration: "60:00",
+                    completed: false,
+                    preview: false
+                },
+                {
+                    id: 3,
+                    title: "جافاسكريبت للمبتدئين",
+                    duration: "90:00",
+                    completed: false,
+                    preview: false
+                },
+                {
+                    id: 4,
+                    title: "تطوير واجهة المستخدم",
+                    duration: "75:00",
+                    completed: false,
+                    preview: false
+                },
+                {
+                    id: 5,
+                    title: "قواعد البيانات",
+                    duration: "120:00",
+                    completed: false,
+                    preview: false
+                }
+            ]
+        };
+
+        // تهيئة مشغل الفيديو
+        document.addEventListener('DOMContentLoaded', function() {
+            // تهيئة العناصر
+            initVideoPlayer();
+            
+            // تحميل البيانات
+            loadVideoData();
+            
+            // إعداد حماية الفيديو
+            setupVideoProtection();
+            
+            // إعداد الأحداث
+            setupEventListeners();
+            
+            // إعداد التنبيهات
+            setupNotifications();
+        });
+
+        // العناصر الرئيسية
+        let video, playIcon, progressBar, currentTimeEl, durationEl;
+        let volumeIcon, volumeSlider;
+        let isPlaying = false;
+        let isFullscreen = false;
+        let videoQuality = 'auto';
+        let playbackRate = 1;
+        let mouseIdleTimer;
+
+        // تهيئة العناصر
+        function initVideoPlayer() {
+            video = document.getElementById('educationalVideo');
+            playIcon = document.getElementById('playIcon');
+            progressBar = document.getElementById('progressBar');
+            currentTimeEl = document.getElementById('currentTime');
+            durationEl = document.getElementById('duration');
+            volumeIcon = document.getElementById('volumeIcon');
+            volumeSlider = document.getElementById('volumeSlider');
+            
+            // تعيين الصوت الافتراضي
+            video.volume = 1;
+            
+            // تعطيل خاصية التحميل المسبق للتحكم في استخدام البيانات
+            video.preload = 'metadata';
+        }
+
+        // تحميل بيانات الفيديو
+        function loadVideoData() {
+            // تحميل بيانات الدورة
+            document.getElementById('courseTitle').textContent = 
+                `${videoData.course.title} - ${videoData.currentLesson.title}`;
+            
+            document.getElementById('lessonTitle').textContent = videoData.currentLesson.title;
+            document.getElementById('lessonDescription').textContent = videoData.currentLesson.description;
+            document.getElementById('lessonDuration').textContent = videoData.currentLesson.duration;
+            document.getElementById('viewsCount').textContent = `${videoData.currentLesson.views} مشاهدة`;
+            
+            // تحديث العلامة المائية
+            document.getElementById('watermark').textContent = 
+                `منصتي التعليمية - ${videoData.course.instructor}`;
+            
+            // تحميل قائمة الدروس
+            loadLessonsList();
+            
+            // إخفاء شاشة التحميل عند جاهزية الفيديو
+            video.addEventListener('loadeddata', function() {
+                document.getElementById('loadingScreen').style.display = 'none';
+                updateDuration();
+            });
+            
+            // عرض خطأ إذا فشل التحميل
+            video.addEventListener('error', function() {
+                document.getElementById('loadingScreen').innerHTML = `
+                    <div style="text-align: center; color: white;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <h3>فشل في تحميل الفيديو</h3>
+                        <p>تعذر تحميل الفيديو. يرجى التحقق من اتصال الإنترنت.</p>
+                        <button onclick="retryVideo()" style="margin-top: 1rem; padding: 0.5rem 1rem; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            <i class="fas fa-redo"></i> إعادة المحاولة
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        // تحميل قائمة الدروس
+        function loadLessonsList() {
+            const container = document.getElementById('lessonsList');
+            const lessons = videoData.lessons;
+            
+            let html = '';
+            lessons.forEach(lesson => {
+                const activeClass = lesson.id === videoData.currentLesson.id ? 'active' : '';
+                const completedIcon = lesson.completed ? '<i class="fas fa-check completed"></i>' : '';
+                const previewBadge = lesson.preview ? '<span style="font-size: 0.8rem; background: var(--primary-color); color: white; padding: 0.2rem 0.5rem; border-radius: 3px;">معاينة</span>' : '';
+                
+                html += `
+                    <div class="lesson-item ${activeClass}" onclick="changeLesson(${lesson.id})">
+                        <div class="lesson-number">${lesson.id}</div>
+                        <div class="lesson-info">
+                            <h3>${lesson.title}</h3>
+                            <div class="lesson-duration">${lesson.duration}</div>
+                        </div>
+                        <div class="lesson-status">
+                            ${completedIcon}
+                            ${previewBadge}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+
+        // إعداد حماية الفيديو
+        function setupVideoProtection() {
+            // منع النقر الأيمن
+            document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                showProtectionMessage('غير مسموح بحفظ المحتوى');
+                return false;
+            });
+            
+            // منع اختصارات لوحة المفاتيح
+            document.addEventListener('keydown', function(e) {
+                // منع F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+                if (e.keyCode === 123 || 
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+                    (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
+                    (e.ctrlKey && e.keyCode === 85)) {
+                    e.preventDefault();
+                    showProtectionMessage('إجراء غير مسموح');
+                    return false;
+                }
+                
+                // منع Print Screen
+                if (e.keyCode === 44) {
+                    e.preventDefault();
+                    showProtectionMessage('غير مسموح بتصوير الشاشة');
+                    return false;
+                }
+                
+                // منع Ctrl+S
+                if (e.ctrlKey && e.keyCode === 83) {
+                    e.preventDefault();
+                    showProtectionMessage('غير مسموح بحفظ الصفحة');
+                    return false;
+                }
+            });
+            
+            // منع سحب وإفلات الفيديو
+            video.addEventListener('dragstart', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // منع التقاط الفيديو
+            video.addEventListener('loadedmetadata', function() {
+                protectCanvas();
+            });
+            
+            // تتبع وقت المشاهدة
+            setupTimeTracking();
+            
+            // حماية من النسخ
+            preventCopying();
+        }
+
+        // حماية Canvas
+        function protectCanvas() {
+            const originalGetContext = HTMLCanvasElement.prototype.getContext;
+            HTMLCanvasElement.prototype.getContext = function(...args) {
+                const context = originalGetContext.apply(this, args);
+                
+                if (context && context.drawImage) {
+                    const originalDrawImage = context.drawImage;
+                    context.drawImage = function(...drawArgs) {
+                        if (drawArgs[0] instanceof HTMLVideoElement) {
+                            console.warn('تم منع محاولة التقاط الفيديو');
+                            showProtectionMessage('تم اكتشاف محاولة نسخ المحتوى');
+                            return;
+                        }
+                        return originalDrawImage.apply(this, drawArgs);
+                    };
+                }
+                return context;
+            };
+        }
+
+        // تتبع وقت المشاهدة
+        function setupTimeTracking() {
+            let lastReportedTime = 0;
+            const reportInterval = 30; // كل 30 ثانية
+            
+            video.addEventListener('timeupdate', function() {
+                const currentTime = Math.floor(video.currentTime);
+                
+                if (currentTime - lastReportedTime >= reportInterval) {
+                    reportViewingTime(currentTime);
+                    lastReportedTime = currentTime;
+                    
+                    // تحديث شريط التقدم
+                    updateProgress();
+                }
+            });
+            
+            // تحديث الوقت الحالي باستمرار
+            setInterval(updateTimeDisplay, 1000);
+        }
+
+        // منع النسخ
+        function preventCopying() {
+            document.addEventListener('copy', function(e) {
+                e.preventDefault();
+                showProtectionMessage('غير مسموح بنسخ المحتوى');
+                return false;
+            });
+        }
+
+        // إعداد الأحداث
+        function setupEventListeners() {
+            // تشغيل/إيقاف عند النقر على الفيديو
+            video.addEventListener('click', togglePlay);
+            
+            // النقر على شاشة البدء
+            document.getElementById('videoOverlay').addEventListener('click', function() {
+                this.style.display = 'none';
+                togglePlay();
+            });
+            
+            // تحديث الأيقونة عند تشغيل/إيقاف الفيديو
+            video.addEventListener('play', function() {
+                isPlaying = true;
+                playIcon.className = 'fas fa-pause';
+                document.getElementById('videoOverlay').style.display = 'none';
+            });
+            
+            video.addEventListener('pause', function() {
+                isPlaying = false;
+                playIcon.className = 'fas fa-play';
+            });
+            
+            // تحديث الصوت
+            video.addEventListener('volumechange', function() {
+                updateVolumeIcon();
+            });
+            
+            // عند نهاية الفيديو
+            video.addEventListener('ended', function() {
+                markLessonAsCompleted();
+                showCompletionMessage();
+            });
+            
+            // عند دخول/خروج الماوس
+            const videoWrapper = document.getElementById('videoWrapper');
+            videoWrapper.addEventListener('mousemove', resetIdleTimer);
+            videoWrapper.addEventListener('mouseleave', hideControls);
+            
+            // إخفاء عناصر التحكم بعد فترة من الخمول
+            resetIdleTimer();
+        }
+
+        // إعداد التنبيهات
+        function setupNotifications() {
+            // التحقق من كتم الصوت
+            setInterval(checkAudioState, 30000);
+            
+            // التحقق من تغيير التبويب
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden) {
+                    video.pause();
+                    showNotification('تم إيقاف الفيديو بسبب تغيير التبويب');
+                }
+            });
+        }
+
+        // وظائف التحكم بالفيديو
+        function togglePlay() {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+
+        function skipBackward() {
+            video.currentTime = Math.max(0, video.currentTime - 10);
+        }
+
+        function skipForward() {
+            video.currentTime = Math.min(video.duration, video.currentTime + 10);
+        }
+
+        function toggleMute() {
+            video.muted = !video.muted;
+        }
+
+        function changeVolume(value) {
+            video.volume = value / 100;
+            video.muted = value === 0;
+            updateVolumeIcon();
+        }
+
+        function toggleQualityMenu() {
+            const menu = document.getElementById('qualityMenu');
+            menu.classList.toggle('show');
+        }
+
+        function changeQuality(quality) {
+            videoQuality = quality;
+            
+            // تحديث القائمة
+            document.querySelectorAll('.quality-option').forEach(option => {
+                option.classList.remove('active');
+                if (option.textContent === quality) {
+                    option.classList.add('active');
+                }
+            });
+            
+            // في حالة حقيقية، سيتم تغيير مصدر الفيديو
+            showNotification(`تم تغيير الجودة إلى ${quality}`);
+            
+            // إخفاء القائمة
+            document.getElementById('qualityMenu').classList.remove('show');
+        }
+
+        function togglePlaybackSpeed() {
+            const speeds = [0.5, 0.75, 1, 1.25, 1.5, 1.75, 2];
+            const currentIndex = speeds.indexOf(playbackRate);
+            playbackRate = speeds[(currentIndex + 1) % speeds.length];
+            video.playbackRate = playbackRate;
+            showNotification(`سرعة التشغيل: ${playbackRate}x`);
+        }
+
+        function toggleFullscreen() {
+            const videoWrapper = document.getElementById('videoWrapper');
+            
+            if (!isFullscreen) {
+                if (videoWrapper.requestFullscreen) {
+                    videoWrapper.requestFullscreen();
+                } else if (videoWrapper.webkitRequestFullscreen) {
+                    videoWrapper.webkitRequestFullscreen();
+                } else if (videoWrapper.msRequestFullscreen) {
+                    videoWrapper.msRequestFullscreen();
+                }
+                isFullscreen = true;
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                isFullscreen = false;
+            }
+            
+            // تحديث الأيقونة
+            const icon = document.querySelector('.control-btn-large .fa-expand');
+            if (icon) {
+                icon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
+            }
+        }
+
+        function seekVideo(event) {
+            const progressContainer = event.currentTarget;
+            const clickPosition = event.offsetX;
+            const containerWidth = progressContainer.offsetWidth;
+            const percentage = clickPosition / containerWidth;
+            video.currentTime = percentage * video.duration;
+            updateProgress();
+        }
+
+        // وظائف التحديث
+        function updateProgress() {
+            const progress = (video.currentTime / video.duration) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        function updateTimeDisplay() {
+            if (video.duration) {
+                currentTimeEl.textContent = formatTime(video.currentTime);
+                durationEl.textContent = formatTime(video.duration);
+            }
+        }
+
+        function updateDuration() {
+            if (video.duration) {
+                durationEl.textContent = formatTime(video.duration);
+            }
+        }
+
+        function updateVolumeIcon() {
+            if (video.muted || video.volume === 0) {
+                volumeIcon.className = 'fas fa-volume-mute';
+                volumeSlider.value = 0;
+            } else if (video.volume < 0.5) {
+                volumeIcon.className = 'fas fa-volume-down';
+                volumeSlider.value = video.volume * 100;
+            } else {
+                volumeIcon.className = 'fas fa-volume-up';
+                volumeSlider.value = video.volume * 100;
+            }
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // وظائف التحكم بالواجهة
+        function toggleSidebar() {
+            const sidebar = document.getElementById('videoSidebar');
+            sidebar.classList.toggle('show');
+        }
+
+        function resetIdleTimer() {
+            clearTimeout(mouseIdleTimer);
+            showControls();
+            
+            mouseIdleTimer = setTimeout(() => {
+                if (isPlaying) {
+                    hideControls();
+                }
+            }, 3000);
+        }
+
+        function showControls() {
+            const controls = document.querySelector('.video-controls');
+            if (controls) {
+                controls.style.opacity = '1';
+            }
+        }
+
+        function hideControls() {
+            const controls = document.querySelector('.video-controls');
+            if (controls) {
+                controls.style.opacity = '0';
+            }
+        }
+
+        // وظائف الحماية
+        function showProtectionMessage(message) {
+            const msgElement = document.getElementById('protectionMessage');
+            const msgText = msgElement.querySelector('p');
+            msgText.textContent = message;
+            msgElement.classList.add('show');
+            
+            setTimeout(() => {
+                msgElement.classList.remove('show');
+            }, 3000);
+        }
+
+        function reportViewingTime(currentTime) {
+            // في حالة حقيقية، سيتم إرسال البيانات للسيرفر
+            console.log(`وقت المشاهدة: ${currentTime} ثانية`);
+        }
+
+        function checkAudioState() {
+            if (video.muted && isPlaying) {
+                showNotification('الفيديو قيد التشغيل بدون صوت');
+            }
+        }
+
+        // وظائف الدروس
+        function changeLesson(lessonId) {
+            const lesson = videoData.lessons.find(l => l.id === lessonId);
+            
+            if (lesson && lesson.preview) {
+                // تحديث بيانات الدرس الحالي
+                videoData.currentLesson = {
+                    ...videoData.currentLesson,
+                    title: lesson.title,
+                    duration: lesson.duration
+                };
+                
+                // تحديث الواجهة
+                document.getElementById('lessonTitle').textContent = lesson.title;
+                document.getElementById('lessonDuration').textContent = lesson.duration;
+                document.getElementById('courseTitle').textContent = 
+                    `${videoData.course.title} - ${lesson.title}`;
+                
+                // تحديث القائمة
+                document.querySelectorAll('.lesson-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                document.querySelector(`.lesson-item:nth-child(${lessonId})`).classList.add('active');
+                
+                // في حالة حقيقية، سيتم تغيير مصدر الفيديو
+                showNotification(`تم تحميل درس: ${lesson.title}`);
+                
+                // إعادة تشغيل الفيديو
+                video.currentTime = 0;
+                video.play();
+            } else if (!lesson.preview) {
+                showNotification('هذا الدرس غير متاح للمعاينة، يرجى التسجيل في الدورة');
+            }
+        }
+
+        function markLessonAsCompleted() {
+            const currentLesson = videoData.currentLesson;
+            const lessonIndex = videoData.lessons.findIndex(l => l.title === currentLesson.title);
+            
+            if (lessonIndex !== -1 && !videoData.lessons[lessonIndex].completed) {
+                videoData.lessons[lessonIndex].completed = true;
+                loadLessonsList();
+                showNotification('مبروك! لقد أتممت هذا الدرس بنجاح');
+            }
+        }
+
+        // وظائف مساعدة
+        function showNotification(message) {
+            // إنشاء عنصر الإشعار
+            const notification = document.createElement('div');
+            notification.className = 'protection-message';
+            notification.style.background = 'rgba(16, 185, 129, 0.9)';
+            notification.innerHTML = `
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <h3>إشعار</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        function showCompletionMessage() {
+            const overlay = document.getElementById('videoOverlay');
+            overlay.innerHTML = `
+                <div class="overlay-content">
+                    <i class="fas fa-trophy" style="color: #fbbf24;"></i>
+                    <h3>مبروك! لقد أتممت الدرس</h3>
+                    <p>اختر الدرس التالي للمتابعة</p>
+                    <div style="margin-top: 2rem;">
+                        <button onclick="replayLesson()" style="margin: 0 0.5rem; padding: 0.5rem 1rem; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            <i class="fas fa-redo"></i> إعادة المشاهدة
+                        </button>
+                        <button onclick="nextLesson()" style="margin: 0 0.5rem; padding: 0.5rem 1rem; background: var(--secondary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                            <i class="fas fa-forward"></i> الدرس التالي
+                        </button>
+                    </div>
+                </div>
+            `;
+            overlay.style.display = 'flex';
+        }
+
+        function replayLesson() {
+            video.currentTime = 0;
+            video.play();
+            document.getElementById('videoOverlay').style.display = 'none';
+        }
+
+        function nextLesson() {
+            const currentId = videoData.currentLesson.id;
+            const nextLesson = videoData.lessons.find(l => l.id === currentId + 1);
+            
+            if (nextLesson && nextLesson.preview) {
+                changeLesson(nextLesson.id);
+                document.getElementById('videoOverlay').style.display = 'none';
+            } else {
+                showNotification('لا توجد دروس متاحة بعد');
+            }
+        }
+
+        function retryVideo() {
+            document.getElementById('loadingScreen').innerHTML = `
+                <div class="spinner"></div>
+            `;
+            document.getElementById('loadingScreen').style.display = 'flex';
+            
+            video.load();
+            setTimeout(() => {
+                video.play().catch(e => {
+                    showNotification('فشل في تشغيل الفيديو');
+                });
+            }, 1000);
+        }
+
+        // جعل الدوال متاحة عالمياً
+        window.togglePlay = togglePlay;
+        window.toggleMute = toggleMute;
+        window.toggleFullscreen = toggleFullscreen;
+        window.toggleQualityMenu = toggleQualityMenu;
+        window.togglePlaybackSpeed = togglePlaybackSpeed;
+        window.toggleSidebar = toggleSidebar;
+        window.changeQuality = changeQuality;
+        window.skipBackward = skipBackward;
+        window.skipForward = skipForward;
+        window.changeVolume = changeVolume;
+        window.seekVideo = seekVideo;
+        window.changeLesson = changeLesson;
+        window.replayLesson = replayLesson;
+        window.nextLesson = nextLesson;
+        window.retryVideo = retryVideo;
+
+        // إضافة event listeners للوضع الكامل
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+        function handleFullscreenChange() {
+            isFullscreen = !!document.fullscreenElement || 
+                          !!document.webkitFullscreenElement || 
+                          !!document.mozFullScreenElement || 
+                          !!document.msFullscreenElement;
+            
+            const icon = document.querySelector('.control-btn-large .fa-expand, .control-btn-large .fa-compress');
+            if (icon) {
+                icon.className = isFullscreen ? 'fas fa-compress' : 'fas fa-expand';
+            }
+        }
+    </script>
+</body>
+</html>

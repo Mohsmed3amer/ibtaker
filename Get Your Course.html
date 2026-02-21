@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اطلب مقررك - ابتكر</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- نفس النافبار بالضبط -->
+<div class="navbar">
+    <!-- Mobile Menu Button -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Logo and Links on Right -->
+    <div class="nav-logo-section">
+        <a href="index.html" class="logo">
+            <img src="./imgs/logoss.png" alt="ابتكر" class="logo-img">
+        </a>
+        
+        <div class="logo-links">
+            <div class="dropdown-wrapper">
+                <a href="university.html" class="has-dropdown">تعلم</a>
+                <!-- Dropdown Menu -->
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="university.html" class="dropdown-item">مواد جامعية</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Search in Center -->
+    <div class="search-container">
+        <div class="search-results-container">
+            <form class="search-form" id="searchForm">
+                <input type="text" class="search-input" id="searchInput" placeholder="ابحث عن مادة أو كورس...">
+                <button type="submit" class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+    </div>
+    
+    <!-- Navigation Links -->
+    <div class="nav-links">
+        <a href="index.html#about">عن ابتكر</a>
+        <a href="index.html#courses">الكورسات</a>
+    </div>
+    
+    <!-- Left Section (Cart and Buttons) -->
+    <div class="nav-left">
+        <a href="Get Your Course.html">
+        <button class="btn btn-login">اطلب مقررك</button>
+    </a>
+        <!-- Cart -->
+        <div class="cart-container">
+            <div class="cart" id="cartButton">
+                <i class="fas fa-shopping-cart"></i>
+                <div class="cart-count" id="cartCount">0</div>
+            </div>
+        </div>
+        
+        <!-- Buttons -->
+        <a href="login.html">
+            <button class="btn btn-login">دخول</button>
+        </a>
+        <a href="register.html">
+            <button class="btn btn-signup">انضم الآن</button>
+        </a>
+    </div>
+</div>
+
+<!-- Cart Modal -->
+<div class="cart-modal" id="cartModal">
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h3>عربة التسوق</h3>
+            <button class="close-cart" id="closeCart">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be inserted here by JavaScript -->
+        </div>
+        <div class="cart-total" id="cartTotal">
+            <!-- Total will be calculated by JavaScript -->
+        </div>
+        <div class="cart-buttons">
+            <button class="checkout-btn" id="checkoutBtn">إتمام الشراء</button>
+            <button class="continue-btn" id="continueBtn">مواصلة التسوق</button>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="mobile-sidebar" id="mobileSidebar">
+    <!-- Mobile Search -->
+    <div class="mobile-search">
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="ابحث عن مادة...">
+        <button class="mobile-search-button" id="mobileSearchButton">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+    
+    <div class="mobile-nav-links">
+        
+        <a href="index.html"><i class="fas fa-home"></i> الرئيسية</a>
+        <a href="university.html"><i class="fas fa-book-open"></i> تعلم</a>
+        <a href="Get Your Course.html" class="active"><i class="fas fa-pen"></i> اطلب مقررك</a>
+        <a href="index.html#about"><i class="fas fa-info-circle"></i> عن ابتكر</a>
+        <a href="index.html#courses"><i class="fas fa-graduation-cap"></i> الكورسات</a>
+        <a href="index.html#contact"><i class="fas fa-phone-alt"></i> اتصل بنا</a>
+    </div>
+    
+    <div class="mobile-buttons">
+        <a href="login.html" style="width: 100%;">
+            <button class="btn btn-login" style="width: 100%;">دخول</button>
+        </a>
+        <a href="register.html" style="width: 100%;">
+            <button class="btn btn-signup" style="width: 100%;">انضم الآن</button>
+        </a>
+    </div>
+</div>
+
+<!-- باقي محتوى الصفحة -->
+<section class="request-course">
+    <div class="request-container">
+        <div class="request-header">
+            <h2><i class="fas fa-book-medical"></i> اطلب مقررك الجامعي</h2>
+            <p class="request-subtitle"> سوف نحاول إن شاء الله بتجهيز المادة العلميه في اقرب وقت </p>
+        </div>
+
+        <form class="request-form">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-user-circle"></i>
+                        <span>الاسم </span>
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder=":   "class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-phone"></i>
+                        <span>رقم الهاتف</span>
+                    </label>
+                    <div class="phone-input">
+                        <div class="country-code">
+                            <span class="flag"></span>
+                            <span class="code"></span>
+                        </div>
+                        <input type="tel" placeholder="+966 5X XXX XXXX
+" class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-university"></i>
+                        <span>اسم الجامعة</span>
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                        <input type="text" placeholder="مثال:  جامعة الملك خالد" class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-book"></i>
+                        <span>اسم المقرر</span>
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-book-open"></i>
+                        <input type="text" placeholder=":   " class="form-input" required>
+                    </div>
+                </div>
+
+               <div class="form-group">
+    <label class="form-label">
+        <i class="fas fa-code-branch"></i>
+        <span>التخصص</span>
+    </label>
+    <div class="input-with-icon">
+        <i class="fas fa-network-wired"></i>
+        <input 
+            type="text" 
+            placeholder=" " 
+            class="form-input" 
+            required
+        >
+    </div>
+</div>
+
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-info-circle"></i>
+                        <span>تفاصيل إضافية</span>
+                    </label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-edit"></i>
+                        <textarea placeholder="أي متطلبات أو تفاصيل إضافية تريد إضافتها..." class="form-input textarea" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i>
+                    <span>إرسال الطلب</span>
+                </button>
+                
+                <div class="features">
+                    <div class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>حماية خصوصية بياناتك</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-clock"></i>
+                        <span>رد خلال ٢٤ ساعة</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check-circle"></i>
+                        <span>جودة مضمونة</span>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Footer المصغر -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>عن ابتكر</h3>
+            <p>منصة تعليمية رائدة تقدم أفضل الكورسات والمواد الجامعية</p>
+        </div>
+        
+        <div class="footer-section">
+            <h3>روابط سريعة</h3>
+            <a href="index.html">الرئيسية</a>
+            <a href="index.html#courses">الكورسات</a>
+            <a href="index.html#about">عنّا</a>
+            <a href="index.html#contact">اتصل بنا</a>
+        </div>
+        
+        <div class="footer-section">
+            <h3>التخصصات</h3>
+            <a href="university.html">مواد جامعية</a>
+            <a href="university.html">كورسات متنوعة</a>
+          
+        </div>
+    </div>
+    
+    <!-- زر واتساب -->
+    <a href="https://wa.me/201015117547" target="_blank" class="whatsapp-chat">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <div class="footer-bottom">
+        <p>© 2024 ابتكر. جميع الحقوق محفوظة</p>
+    </div>
+</footer>
+
+<style>
+.whatsapp-chat {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #25D366, var(--primary-gold));
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+    animation: whatsappPulse 2s infinite;
+}
+
+@keyframes whatsappPulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5);
+    }
+}
+
+.whatsapp-chat:hover {
+    transform: scale(1.1);
+    box-shadow: 0 20px 40px rgba(37, 211, 102, 0.6);
+    animation: none;
+}
+
+/* نفس الCSS للنافبار */
+:root {
+    --primary-gold: #D4AF37;
+    --gold-light: #FFE8A3;
+    --gold-dark: #B8860B;
+    --white: #FFFFFF;
+    --black: #000000;
+    --gray-dark: #1A1A1A;
+    --gray-medium: #333333;
+    --gray-light: #F5F5F5;
+    --bg: #FAFAFA;
+    --text: #2C2C2C;
+    --accent: #D4AF37;
+    --success: #4CAF50;
+    --warning: #ff9800;
+    --danger: #f44336;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Cairo', sans-serif;
+}
+
+body {
+    background: var(--black);
+    color: var(--text);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+    background: rgba(255,255,255,0.98);
+    padding: 12px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.nav-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.logo-img {
+    width: 100px;
+    height: 80px;
+    object-fit: contain;
+}
+
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.logo-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.logo-links a {
+    text-decoration: none;
+    color: var(--gray-medium);
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 0;
+    position: relative;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.logo-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold-light), var(--primary-gold));
+    transition: width 0.3s ease;
+}
+
+.logo-links a:hover::after,
+.logo-links a.active::after {
+    width: 100%;
+}
+
+.logo-links a:hover,
+.logo-links a.active {
+    color: var(--primary-gold);
+}
+
+.dropdown-wrapper .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    min-width: 200px;
+    display: none;
+    z-index: 1000;
+    border: 2px solid var(--gold-light);
+    overflow: hidden;
+}
+
+.dropdown-wrapper .dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 15px 20px;
+    color: var(--gray-dark);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.dropdown-item:hover {
+    background: var(--gray-light);
+    color: var(--primary-gold);
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.search-container {
+    flex: 2;
+    max-width: 600px;
+    margin: 0 30px;
+    position: relative;
+}
+
+.search-results-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-form {
+    display: flex;
+    width: 100%;
+}
+
+.search-input {
+    flex: 1;
+    padding: 12px 45px 12px 20px;
+    border: 2px solid var(--gold-light);
+    border-radius: 30px;
+    font-size: 16px;
+    outline: none;
+    background: var(--white);
+    color: var(--gray-dark);
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary-gold);
+    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
+}
+
+.search-button {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--primary-gold);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    max-height: 500px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    margin-top: 10px;
+    border: 2px solid var(--gold-light);
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.search-result-item:hover {
+    background: var(--gray-light);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.search-result-item h4 {
+    margin: 0 0 5px 0;
+    color: var(--gray-dark);
+    font-size: 16px;
+    flex: 1;
+}
+
+.search-result-item p {
+    margin: 0;
+    color: var(--gray-medium);
+    font-size: 14px;
+}
+
+.search-result-item .price {
+    color: var(--primary-gold);
+    font-weight: 700;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.no-results {
+    padding: 30px;
+    text-align: center;
+    color: var(--gray-medium);
+    font-size: 16px;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-left: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--gray-medium);
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 0;
+    position: relative;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold-light), var(--primary-gold));
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-links a:hover {
+    color: var(--primary-gold);
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: flex-end;
+}
+
+.cart-container {
+    position: relative;
+}
+
+.cart {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFFBF0, #FFF5E1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--primary-gold);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.15);
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    background: var(--black);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn {
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 15px;
+    border: none;
+    white-space: nowrap;
+}
+
+.btn-login {
+    background: var(--white);
+    border: 2px solid var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+.btn-login:hover {
+    background: var(--primary-gold);
+    color: var(--white);
+}
+
+.btn-signup {
+    color: var(--white);
+    background: linear-gradient(135deg, var(--gold-light), var(--primary-gold));
+}
+
+.btn-signup:hover {
+    transform: translateY(-3px);
+}
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--primary-gold);
+    cursor: pointer;
+    padding: 10px;
+}
+
+/* ========== CART MODAL ========== */
+.cart-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: none;
+    justify-content: flex-end;
+}
+
+.cart-modal.show {
+    display: flex;
+}
+
+.cart-sidebar {
+    width: 100%;
+    max-width: 450px;
+    height: 100%;
+    background: white;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--gold-light);
+    margin-bottom: 20px;
+}
+
+.cart-header h3 {
+    color: var(--gray-dark);
+    font-size: 24px;
+    margin: 0;
+}
+
+.close-cart {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--primary-gold);
+    cursor: pointer;
+    padding: 5px;
+}
+
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+    min-height: 300px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--gray-light);
+    border-radius: 15px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.cart-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.cart-item-details {
+    flex: 1;
+}
+
+.cart-item-title {
+    font-weight: 700;
+    color: var(--gray-dark);
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.cart-item-price {
+    color: var(--primary-gold);
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.remove-from-cart {
+    background: none;
+    border: none;
+    color: #ff4444;
+    cursor: pointer;
+    padding: 8px;
+    font-size: 18px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.remove-from-cart:hover {
+    background: #ffeeee;
+}
+
+.cart-empty {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--gray-medium);
+}
+
+.cart-empty i {
+    font-size: 60px;
+    color: var(--gold-light);
+    margin-bottom: 20px;
+}
+
+.cart-empty p {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.cart-total {
+    padding: 20px;
+    background: var(--gray-light);
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.total-row.final {
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--gray-dark);
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 2px solid var(--gold-light);
+}
+
+.cart-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.checkout-btn {
+    background: linear-gradient(135deg, var(--primary-gold), var(--gold-dark));
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.checkout-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+}
+
+.continue-btn {
+    background: white;
+    color: var(--primary-gold);
+    border: 2px solid var(--primary-gold);
+    padding: 16px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.continue-btn:hover {
+    background: var(--primary-gold);
+    color: white;
+}
+
+/* Mobile Sidebar */
+.mobile-sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 85%;
+    max-width: 400px;
+    height: 100vh;
+    background: var(--white);
+    z-index: 9999;
+    box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+    transition: right 0.4s;
+    padding: 80px 20px 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile-sidebar.active {
+    right: 0;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-search {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.mobile-search-input {
+    width: 100%;
+    padding: 12px 45px 12px 20px;
+    border: 2px solid var(--gold-light);
+    border-radius: 25px;
+    font-size: 16px;
+}
+
+.mobile-search-button {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--primary-gold);
+    font-size: 18px;
+}
+
+.mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.mobile-nav-links a {
+    padding: 15px 20px;
+    color: var(--gray-dark);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mobile-nav-links a i {
+    width: 25px;
+    text-align: center;
+    color: var(--primary-gold);
+}
+
+.mobile-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: auto;
+}
+
+/* Responsive */
+@media(max-width: 992px){
+    .nav-links{
+        display: none;
+    }
+    
+    .logo-links{
+        display: none;
+    }
+    
+    .menu-toggle {
+        display: block;
+    }
+    
+    .nav-logo-section {
+        justify-content: flex-start;
+        gap: 15px;
+    }
+    
+    .search-container {
+        display: none;
+    }
+}
+
+/* ========== REQUEST COURSE SECTION ========== */
+.request-course {
+    margin: 120px auto 60px;
+    padding: 0 20px;
+    max-width: 800px;
+}
+
+.request-container {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.request-header {
+    background: linear-gradient(135deg, var(--primary-gold), var(--gold-dark));
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+
+.request-header h2 {
+    font-size: 32px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.request-subtitle {
+    font-size: 18px;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.request-form {
+    padding: 40px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.form-group:nth-child(5),
+.form-group:nth-child(6) {
+    grid-column: span 2;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    font-weight: 600;
+    color: var(--gray-dark);
+    font-size: 16px;
+}
+
+.form-label i {
+    color: var(--primary-gold);
+    font-size: 18px;
+}
+
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon i {
+    position: absolute;
+    right: 15px;
+    color: var(--gray-medium);
+    font-size: 18px;
+    z-index: 1;
+}
+
+.form-input {
+    width: 100%;
+    padding: 16px 50px 16px 20px;
+    border: 2px solid var(--gray-light);
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: 'Cairo', sans-serif;
+    transition: all 0.3s ease;
+    background: var(--bg);
+}
+
+.form-input:focus {
+    border-color: var(--primary-gold);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    background: white;
+}
+
+.textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+.phone-input {
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--gray-light);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg);
+}
+
+.country-code {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 15px;
+    background: white;
+    border-left: 2px solid var(--gray-light);
+    height: 100%;
+}
+
+.country-code .flag {
+    font-size: 24px;
+}
+
+.country-code .code {
+    font-weight: 600;
+    color: var(--gray-dark);
+}
+
+.phone-input .form-input {
+    border: none;
+    border-radius: 0;
+    flex: 1;
+}
+
+/* Submit Button */
+.form-actions {
+    text-align: center;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, var(--primary-gold), var(--gold-dark));
+    color: white;
+    border: none;
+    padding: 18px 50px;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    margin-bottom: 30px;
+}
+
+.submit-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(212, 175, 55, 0.3);
+}
+
+.submit-btn:active {
+    transform: translateY(-1px);
+}
+
+/* Features */
+.features {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding-top: 30px;
+    border-top: 1px solid var(--gray-light);
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--gray-medium);
+    font-size: 14px;
+}
+
+.feature-item i {
+    color: var(--primary-gold);
+    font-size: 16px;
+}
+
+/* ========== FOOTER المصغر ========== */
+.footer {
+    background: #000;
+    color: white;
+    padding: 40px 30px 20px;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.footer-section h3 {
+    color: var(--primary-gold);
+    margin-bottom: 15px;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.footer-section p,
+.footer-section a {
+    color: #bbb;
+    text-decoration: none;
+    margin-bottom: 8px;
+    display: block;
+    transition: color 0.3s ease;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.footer-section p {
+    margin-bottom: 0;
+}
+
+.footer-section a:hover {
+    color: var(--primary-gold);
+    transform: translateX(-5px);
+}
+
+.footer-bottom {
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #999;
+    font-size: 14px;
+}
+
+/* Responsive Footer */
+@media(max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-group:nth-child(5),
+    .form-group:nth-child(6) {
+        grid-column: span 1;
+    }
+    
+    .request-header {
+        padding: 30px 20px;
+    }
+    
+    .request-header h2 {
+        font-size: 26px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .request-form {
+        padding: 30px 20px;
+    }
+    
+    .submit-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .features {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .request-course {
+        margin: 100px auto 50px;
+        padding: 0 15px;
+    }
+    
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+    
+    .footer {
+        padding: 35px 20px 20px;
+        margin-top: 50px;
+    }
+}
+
+@media(max-width: 480px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .request-header h2 {
+        font-size: 22px;
+    }
+    
+    .request-subtitle {
+        font-size: 16px;
+    }
+    
+    .whatsapp-chat {
+        width: 55px;
+        height: 55px;
+        font-size: 26px;
+        bottom: 15px;
+        right: 15px;
+    }
+}
+</style>
+
+<script src="./js/Get Your Course.js"></script>
+</body>
+</html>

@@ -1,0 +1,2311 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>ابتكر - المواد الجامعية</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* Reset and Base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Cairo', sans-serif;
+}
+
+:root {
+    --primary-gold: #D4AF37;
+    --gold-light: #FFE8A3;
+    --gold-dark: #B8860B;
+    --white: #FFFFFF;
+    --black: #000000;
+    --gray-dark: #1A1A1A;
+    --gray-medium: #333333;
+    --gray-light: #F5F5F5;
+    --bg: #FAFAFA;
+    --text: #2C2C2C;
+    --accent: #D4AF37;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+/* ========== NAVBAR ========== */
+.navbar {
+    background: rgba(255,255,255,0.98);
+    padding: 12px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 20px rgba(0,0,0,.08);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+/* Logo on the right */
+.nav-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex: 1;
+    justify-content: flex-start;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.logo-img {
+    width: 100px;
+    height: 80px;
+    object-fit: contain;
+}
+
+/* Dropdown Wrapper */
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.logo-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.logo-links a {
+    text-decoration: none;
+    color: var(--gray-medium);
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 0;
+    position: relative;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.logo-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold-light), var(--primary-gold));
+    transition: width 0.3s ease;
+}
+
+.logo-links a:hover::after,
+.logo-links a.active::after {
+    width: 100%;
+}
+
+.logo-links a:hover,
+.logo-links a.active {
+    color: var(--primary-gold);
+}
+
+/* Dropdown Menu */
+.dropdown-wrapper .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    min-width: 200px;
+    display: none;
+    z-index: 1000;
+    border: 2px solid var(--gold-light);
+    overflow: hidden;
+}
+
+.dropdown-wrapper .dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 15px 20px;
+    color: var(--gray-dark);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.dropdown-item:hover {
+    background: var(--gray-light);
+    color: var(--primary-gold);
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+/* Search in center */
+.search-container {
+    flex: 2;
+    max-width: 600px;
+    margin: 0 30px;
+    position: relative;
+}
+
+.search-results-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-form {
+    display: flex;
+    width: 100%;
+}
+
+.search-input {
+    flex: 1;
+    padding: 12px 45px 12px 20px;
+    border: 2px solid var(--gold-light);
+    border-radius: 30px;
+    font-size: 16px;
+    outline: none;
+    background: var(--white);
+    color: var(--gray-dark);
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: var(--primary-gold);
+    box-shadow: 0 5px 20px rgba(212, 175, 55, 0.2);
+}
+
+.search-button {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--primary-gold);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Search Results Dropdown */
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    max-height: 500px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    margin-top: 10px;
+    border: 2px solid var(--gold-light);
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.search-result-item:hover {
+    background: var(--gray-light);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item img {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.search-result-item h4 {
+    margin: 0 0 5px 0;
+    color: var(--gray-dark);
+    font-size: 16px;
+    flex: 1;
+}
+
+.search-result-item p {
+    margin: 0;
+    color: var(--gray-medium);
+    font-size: 14px;
+}
+
+.search-result-item .price {
+    color: var(--primary-gold);
+    font-weight: 700;
+    font-size: 18px;
+    white-space: nowrap;
+}
+
+.no-results {
+    padding: 30px;
+    text-align: center;
+    color: var(--gray-medium);
+    font-size: 16px;
+}
+
+/* Navigation links */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-left: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--gray-medium);
+    font-weight: 600;
+    font-size: 16px;
+    padding: 10px 0;
+    position: relative;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold-light), var(--primary-gold));
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-links a:hover {
+    color: var(--primary-gold);
+}
+
+/* Nav left section (buttons and cart) */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: flex-end;
+}
+
+.cart-container {
+    position: relative;
+}
+
+.cart {
+    position: relative;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFFBF0, #FFF5E1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--primary-gold);
+    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.15);
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    background: var(--black);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Buttons */
+.btn {
+    padding: 12px 28px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s;
+    font-size: 15px;
+    border: none;
+    white-space: nowrap;
+}
+
+.btn-login {
+    background: var(--white);
+    border: 2px solid var(--primary-gold);
+    color: var(--primary-gold);
+}
+
+.btn-login:hover {
+    background: var(--primary-gold);
+    color: var(--white);
+}
+
+.btn-signup {
+    color: var(--white);
+    background: linear-gradient(135deg, var(--gold-light), var(--primary-gold));
+}
+
+.btn-signup:hover {
+    transform: translateY(-3px);
+}
+
+/* Mobile Menu */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--primary-gold);
+    cursor: pointer;
+    padding: 10px;
+}
+
+/* ========== CART MODAL ========== */
+.cart-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9999;
+    display: none;
+    justify-content: flex-end;
+}
+
+.cart-modal.show {
+    display: flex;
+}
+
+.cart-sidebar {
+    width: 100%;
+    max-width: 450px;
+    height: 100%;
+    background: white;
+    padding: 20px;
+    overflow-y: auto;
+    box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 2px solid var(--gold-light);
+    margin-bottom: 20px;
+}
+
+.cart-header h3 {
+    color: var(--gray-dark);
+    font-size: 24px;
+    margin: 0;
+}
+
+.close-cart {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--primary-gold);
+    cursor: pointer;
+    padding: 5px;
+}
+
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+    min-height: 300px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: var(--gray-light);
+    border-radius: 15px;
+    border: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.cart-item img {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.cart-item-details {
+    flex: 1;
+}
+
+.cart-item-title {
+    font-weight: 700;
+    color: var(--gray-dark);
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+.cart-item-price {
+    color: var(--primary-gold);
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.remove-from-cart {
+    background: none;
+    border: none;
+    color: #ff4444;
+    cursor: pointer;
+    padding: 8px;
+    font-size: 18px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.remove-from-cart:hover {
+    background: #ffeeee;
+}
+
+.cart-empty {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--gray-medium);
+}
+
+.cart-empty i {
+    font-size: 60px;
+    color: var(--gold-light);
+    margin-bottom: 20px;
+}
+
+.cart-empty p {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.cart-total {
+    padding: 20px;
+    background: var(--gray-light);
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+.total-row.final {
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--gray-dark);
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 2px solid var(--gold-light);
+}
+
+.cart-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.checkout-btn {
+    background: linear-gradient(135deg, var(--primary-gold), var(--gold-dark));
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.checkout-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+}
+
+.continue-btn {
+    background: white;
+    color: var(--primary-gold);
+    border: 2px solid var(--primary-gold);
+    padding: 16px;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.continue-btn:hover {
+    background: var(--primary-gold);
+    color: white;
+}
+
+/* Mobile Sidebar */
+.mobile-sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 85%;
+    max-width: 400px;
+    height: 100vh;
+    background: var(--white);
+    z-index: 9999;
+    box-shadow: -5px 0 25px rgba(0,0,0,0.15);
+    transition: right 0.4s;
+    padding: 80px 20px 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.mobile-sidebar.active {
+    right: 0;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.mobile-search {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.mobile-search-input {
+    width: 100%;
+    padding: 12px 45px 12px 20px;
+    border: 2px solid var(--gold-light);
+    border-radius: 25px;
+    font-size: 16px;
+}
+
+.mobile-search-button {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--primary-gold);
+    font-size: 18px;
+}
+
+.mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.mobile-nav-links a {
+    padding: 15px 20px;
+    color: var(--gray-dark);
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 600;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mobile-nav-links a i {
+    width: 25px;
+    text-align: center;
+    color: var(--primary-gold);
+}
+
+.mobile-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: auto;
+}
+
+/* ===== SECTION ===== */
+.slider-section{
+    padding: 140px 40px 80px;
+    text-align: center;
+    background: white;
+    min-height: 100vh;
+}
+
+.slider-section h1{
+    font-size: 48px;
+    margin-bottom: 20px;
+    color: #000;
+    font-weight: 800;
+    position: relative;
+    display: inline-block;
+}
+
+.slider-section h1::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 50%;
+    transform: translateX(50%);
+    width: 100px;
+    height: 3px;
+    background: #D4AF37;
+}
+
+.slider-section p{
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 60px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+/* ===== WRAPPER ===== */
+.cards-wrapper{
+    position: relative;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+/* ===== GROUP ===== */
+.cards-group{
+    display: none;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    animation: slideFade 0.6s ease;
+}
+
+.cards-group.active{
+    display: grid;
+}
+
+/* ===== CARD - LUXURY DESIGN ===== */
+.card{
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    transition: all 0.4s ease;
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card:hover{
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border-color: #D4AF37;
+}
+
+.card-image{
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    background: #000;
+}
+
+.card-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+    opacity: 0.9;
+}
+
+.card:hover .card-image img{
+    transform: scale(1.05);
+    opacity: 1;
+}
+
+.card-badge{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #D4AF37;
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 2;
+    box-shadow: 0 3px 10px rgba(212, 175, 55, 0.3);
+}
+
+.card-content{
+    padding: 25px;
+    text-align: right;
+}
+
+.card h3{
+    margin: 0 0 10px;
+    font-size: 20px;
+    color: #000;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.card-desc{
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    min-height: 42px;
+}
+
+.card-university {
+    color: #333;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    background: #f8f9fa;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.card-price{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #000;
+    font-size: 22px;
+}
+
+.card-price .old-price{
+    text-decoration: line-through;
+    color: #999;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* ===== SUBSCRIBE BUTTON ===== */
+.subscribe-btn{
+    display: block;
+    width: 100%;
+    padding: 14px;
+    background: #000;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.subscribe-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
+    transition: left 0.7s;
+}
+
+.subscribe-btn:hover::before {
+    left: 100%;
+}
+
+.subscribe-btn:hover{
+    background: #D4AF37;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(212, 175, 55, 0.2);
+}
+
+.subscribe-btn:active{
+    transform: translateY(-1px);
+}
+
+/* ===== ARROWS ===== */
+.slider-arrows{
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.slider-arrows button{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #000;
+    cursor: pointer;
+    font-size: 22px;
+    background: white;
+    color: #000;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-arrows button:hover{
+    background: #000;
+    color: white;
+    transform: scale(1.1);
+    border-color: #000;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes slideFade{
+    from{
+        opacity: 0;
+        transform: translateX(60px);
+    }
+    to{
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ===== CHECKOUT MODAL ===== */
+.checkout-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+.checkout-modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    padding: 30px;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-header h3 i {
+    color: #D4AF37;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #ff4444;
+}
+
+.order-summary {
+    margin: 25px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-total {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    font-size: 18px;
+}
+
+.order-total .total {
+    color: #D4AF37;
+    font-size: 22px;
+}
+
+.checkout-form {
+    margin-top: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #D4AF37;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.modal-btn {
+    flex: 1;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+.modal-btn.cancel {
+    background: #f8f9fa;
+    color: #333;
+}
+
+.modal-btn.confirm {
+    background: #D4AF37;
+    color: white;
+}
+
+.modal-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,.1);
+}
+
+.modal-btn.confirm:hover {
+    background: #c19b2a;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background: #000000;
+    color: rgb(255, 255, 255);
+    padding: 60px 40px;
+    text-align: center;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+}
+
+.footer-section h3 {
+    color: #d3a614;
+    margin-bottom: 20px;
+    font-size: 18px;
+}
+
+.footer-section p,
+.footer-section a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #D4AF37;
+}
+
+.footer-bottom {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cf8700;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width: 1200px){
+    .cards-group{
+        grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .search-container {
+        max-width: 400px;
+    }
+}
+
+@media(max-width: 992px){
+    .cards-group{
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .nav-links{
+        display: none;
+    }
+    
+    .logo-links{
+        display: none;
+    }
+    
+    .menu-toggle {
+        display: block;
+    }
+    
+    .nav-logo-section {
+        justify-content: flex-start;
+        gap: 15px;
+    }
+    
+    .search-container {
+        display: none;
+    }
+    
+    .slider-section h1 {
+        font-size: 36px;
+    }
+}
+
+@media(max-width: 768px){
+    .cards-group{
+        grid-template-columns: 1fr;
+        max-width: 450px;
+        margin: 0 auto;
+    }
+    
+    .slider-section{
+        padding: 120px 20px 60px;
+    }
+    
+    .slider-section h1{
+        font-size: 32px;
+    }
+    
+    .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .navbar {
+        padding: 10px 5%;
+    }
+}
+
+@media(max-width: 600px){
+    .slider-section h1{
+        font-size: 28px;
+    }
+    
+    .card-image{
+        height: 180px;
+    }
+    
+    .card-content{
+        padding: 20px;
+    }
+    
+    .nav-left {
+        gap: 10px;
+    }
+    
+    .btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+    }
+    
+    .cart {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+}
+
+@media(max-width: 480px){
+    .slider-section h1{
+        font-size: 24px;
+    }
+    
+    .btn-login,
+    .btn-signup {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+    
+    .logo {
+        font-size: 18px;
+    }
+    
+    .logo-img {
+        width: 60px;
+        height: 50px;
+    }
+}
+
+
+
+
+
+
+
+
+
+/* ========== UNIVERSITIES DROPDOWN ========== */
+.universities-btn {
+    background: none;
+    border: 2px solid var(--primary-gold);
+    color: var(--primary-gold);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.universities-btn:hover {
+    background: var(--primary-gold);
+    color: var(--white);
+}
+
+.universities-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+    z-index: 1000;
+    border: 2px solid var(--gold-light);
+    margin-top: 10px;
+}
+
+.universities-dropdown.show {
+    display: block;
+}
+
+.universities-search {
+    padding: 15px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    position: relative;
+}
+
+.universities-search input {
+    width: 100%;
+    padding: 10px 35px 10px 15px;
+    border: 1px solid var(--gold-light);
+    border-radius: 25px;
+    font-size: 14px;
+    outline: none;
+}
+
+.universities-search i {
+    position: absolute;
+    right: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-gold);
+}
+
+.universities-list {
+    padding: 10px 0;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.university-item {
+    display: block;
+    padding: 12px 20px;
+    color: var(--gray-dark);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 600;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.05);
+}
+
+.university-item:hover {
+    background: var(--gray-light);
+    color: var(--primary-gold);
+}
+
+.university-item:last-child {
+    border-bottom: none;
+}
+
+/* Mobile version of universities dropdown */
+.mobile-universities {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.mobile-universities-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--white);
+    border: 2px solid var(--primary-gold);
+    border-radius: 25px;
+    color: var(--primary-gold);
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.mobile-universities-btn:hover {
+    background: var(--primary-gold);
+    color: var(--white);
+}
+
+.mobile-universities-dropdown {
+    background: var(--white);
+    border-radius: 15px;
+    border: 2px solid var(--gold-light);
+    margin-top: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.mobile-universities-dropdown.show {
+    max-height: 400px;
+}
+
+.mobile-universities-search {
+    padding: 15px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+}
+
+.mobile-universities-search input {
+    width: 100%;
+    padding: 12px 20px;
+    border: 1px solid var(--gold-light);
+    border-radius: 25px;
+    font-size: 16px;
+}
+
+/* ========== FILTER INDICATOR ========== */
+.filter-indicator {
+    display: inline-block;
+    background: var(--primary-gold);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 16px;
+    margin: 20px 0;
+    animation: fadeIn 0.3s ease;
+}
+
+.filter-indicator button {
+    background: none;
+    border: none;
+    color: white;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Search highlight for filtered courses */
+.card.highlight {
+    animation: highlightCard 1s ease;
+    box-shadow: 0 0 0 3px var(--primary-gold);
+}
+
+@keyframes highlightCard {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.whatsapp-chat {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #25D366, var(--primary-gold));
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+    box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+    animation: whatsappPulse 2s infinite;
+}
+
+@keyframes whatsappPulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 15px 35px rgba(37, 211, 102, 0.4);
+    }
+    50% { 
+        transform: scale(1.1);
+        box-shadow: 0 20px 45px rgba(37, 211, 102, 0.6);
+    }
+}
+
+.whatsapp-chat:hover {
+    transform: scale(1.15);
+    box-shadow: 0 25px 50px rgba(37, 211, 102, 0.7);
+    animation: none;
+}
+</style>
+</head>
+<body>
+<!-- NAVBAR -->
+<div class="navbar">
+    <!-- Mobile Menu Button -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <!-- Logo and Links on Right -->
+    <div class="nav-logo-section">
+        <a href="index.html" class="logo">
+            <img src="./imgs/logoss.png" alt="ابتكر" class="logo-img">
+        </a>
+        
+        <div class="logo-links">
+            <div class="dropdown-wrapper">
+                <a href="university.html" class="has-dropdown">تعلم</a>
+                <!-- Dropdown Menu -->
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="university.html" class="dropdown-item">مواد جامعية</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Search in Center -->
+    <div class="search-container">
+        <div class="search-results-container">
+            <form class="search-form" id="searchForm">
+                <input type="text" class="search-input" id="searchInput" placeholder="ابحث عن مادة أو كورس...">
+                <button type="submit" class="search-button">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            <div class="search-results" id="searchResults"></div>
+        </div>
+    </div>
+    
+    <!-- Navigation Links -->
+    <div class="nav-links">
+        <div class="dropdown-wrapper">
+            <button class="universities-btn" id="universitiesBtn">جميع الجامعات</button>
+            <div class="universities-dropdown" id="universitiesDropdown">
+                <div class="universities-search">
+                    <input type="text" placeholder="ابحث عن جامعة..." id="universitySearch">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div class="universities-list">
+                    <a href="#" class="university-item" data-university="all">جميع الجامعات</a>
+                    <a href="#" class="university-item" data-university="king-khalid">جامعة الملك خالد</a>
+                    <a href="#" class="university-item" data-university="king-faisal">جامعة الملك فيصل</a>
+                    <a href="#" class="university-item" data-university="taibah">جامعة طيبة</a>
+                    <a href="#" class="university-item" data-university="taif">جامعة الطائف</a>
+                    <a href="#" class="university-item" data-university="jeddah">جامعة جدة</a>
+                    <a href="#" class="university-item" data-university="umm-alqura">جامعة أم القرى</a>
+                    <a href="#" class="university-item" data-university="al-baha">جامعة الباحة</a>
+                    <a href="#" class="university-item" data-university="qassim">جامعة القصيم</a>
+                </div>
+            </div>
+        </div>
+        <a href="index.html#courses">الكورسات</a>
+    </div>
+    
+    <!-- Left Section (Cart and Buttons) -->
+    <div class="nav-left">
+        <!-- Cart -->
+        <a href="Get Your Course.html">
+            <button class="btn btn-login">اطلب مقررك</button>
+        </a>
+        <div class="cart-container">
+            <div class="cart" id="cartButton">
+                🛒
+                <div class="cart-count" id="cartCount">0</div>
+            </div>
+        </div>
+        
+        <!-- Buttons -->
+        <a href="login.html">
+            <button class="btn btn-login">دخول</button>
+        </a>
+        <a href="register.html">
+            <button class="btn btn-signup">انضم الآن</button>
+        </a>
+    </div>
+</div>
+
+<!-- Cart Modal -->
+<div class="cart-modal" id="cartModal">
+    <div class="cart-sidebar">
+        <div class="cart-header">
+            <h3>عربة التسوق</h3>
+            <button class="close-cart" id="closeCart">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be inserted here by JavaScript -->
+        </div>
+        <div class="cart-total" id="cartTotal">
+            <!-- Total will be calculated by JavaScript -->
+        </div>
+        <div class="cart-buttons">
+            <button class="checkout-btn" id="checkoutBtn">إتمام الشراء</button>
+            <button class="continue-btn" id="continueBtn">مواصلة التسوق</button>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Sidebar -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<div class="mobile-sidebar" id="mobileSidebar">
+    <!-- Mobile Search -->
+    <div class="mobile-search">
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="ابحث عن مادة...">
+        <button class="mobile-search-button" id="mobileSearchButton">
+            <i class="fas fa-search"></i>
+        </button>
+    </div>
+    
+    <div class="mobile-nav-links">
+        <a href="Get Your Course.html" style="width: 100%;">
+            <button class="btn btn-signup" style="width: 100%; background: linear-gradient(135deg, var(--gold-light), var(--primary-gold));">اطلب مقررك</button>
+        </a>
+        <a href="index.html" class="active"><i class="fas fa-home"></i> الرئيسية</a>
+        <a href="university.html"><i class="fas fa-book-open"></i> تعلم</a>
+        <a href="index.html#about"><i class="fas fa-info-circle"></i> عن ابتكر</a>
+        <a href="index.html#courses"><i class="fas fa-graduation-cap"></i> الكورسات</a>
+        <a href="index.html#contact"><i class="fas fa-phone-alt"></i> اتصل بنا</a>
+    </div>
+    
+    <div class="mobile-buttons">
+        <a href="login.html" style="width: 100%;">
+            <button class="btn btn-login" style="width: 100%;">دخول</button>
+        </a>
+        <a href="register.html" style="width: 100%;">
+            <button class="btn btn-signup" style="width: 100%;">انضم الآن</button>
+        </a>
+    </div>
+</div>
+
+<section class="slider-section">
+    <h1>المواد الجامعية</h1>
+    <p>أفضل الكورسات المختارة لك، تم اختيارها بعناية من قبل خبراء التعليم</p>
+
+    <!-- مؤشر الفلترة النشطة -->
+    <div class="filter-indicator" id="filterIndicator" style="display: none;">
+        <span id="activeFilterText">جميع الجامعات</span>
+        <button id="clearFilter">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <div class="cards-wrapper">
+        <!-- ===== GROUP 1 ===== -->
+        <div class="cards-group active" id="group1">
+            <!-- كارد 1 -->
+            <div class="card" data-course-id="1" data-course-name="محاسبه تكاليف" data-course-price="80" data-university="جامعة الباحة">
+                <div class="card-image">
+                    <span class="card-badge">الأكثر مبيعاً</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.52.41 AM (1).jpeg" alt="محاسبه تكاليف">
+                </div>
+                <div class="card-content">
+                    <h3>محاسبه تكاليف</h3>
+                    <div class="card-university">جامعة الباحة</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 2 -->
+            <div class="card" data-course-id="2" data-course-name="المحاسبه المتقدمه" data-course-price="100" data-university="جامعة الباحة">
+                <div class="card-image">
+                    <span class="card-badge">جديد</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.52.41 AM (2).jpeg" alt="المحاسبه المتقدمه">
+                </div>
+                <div class="card-content">
+                    <h3>المحاسبه المتقدمه</h3>
+                    <div class="card-university">جامعة الباحة</div>
+                    <div class="card-price">
+                        <span>100 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 3 -->
+            <div class="card" data-course-id="3" data-course-name="2المحاسبه المتوسطه" data-course-price="100" data-university="جامعة الباحة">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.52.41 AM.jpeg" alt="2المحاسبه المتوسطه">
+                </div>
+                <div class="card-content">
+                    <h3>2المحاسبه المتوسطه</h3>
+                    <div class="card-university">جامعة الباحة</div>
+                    <div class="card-price">
+                        <span>100 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 4 -->
+            <div class="card" data-course-id="4" data-course-name="1 مقرر محاسبه ماليه متوسطه" data-course-price="90" data-university="جامعة طيبة">
+                <div class="card-image">
+                    <span class="card-badge">متميز</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.53.22 AM (1).jpeg" alt="1 مقرر محاسبه ماليه متوسطه">
+                </div>
+                <div class="card-content">
+                    <h3>1 مقرر محاسبه ماليه متوسطه</h3>
+                    <div class="card-university">جامعة طيبة</div>
+                    <div class="card-price">
+                        <span>90 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 5 -->
+            <div class="card" data-course-id="5" data-course-name="2 مقرر محاسبه ماليه متوسطه" data-course-price="90" data-university="جامعة طيبة">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.53.22 AM.jpeg" alt="2 مقرر محاسبه ماليه متوسطه">
+                </div>
+                <div class="card-content">
+                    <h3>2 مقرر محاسبه ماليه متوسطه</h3>
+                    <div class="card-university">جامعة طيبة</div>
+                    <div class="card-price">
+                        <span>90 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 6 -->
+            <div class="card" data-course-id="6" data-course-name="التكاليف والمحاسبه الاداريه" data-course-price="80" data-university="جامعة طيبة">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.53.23 AM (1).jpeg" alt="التكاليف والمحاسبه الاداريه">
+                </div>
+                <div class="card-content">
+                    <h3>التكاليف والمحاسبه الاداريه</h3>
+                    <div class="card-university">جامعة طيبة</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 7 -->
+            <div class="card" data-course-id="7" data-course-name="المحاسبه الماليه المتقدمه" data-course-price="100" data-university="جامعة طيبة">
+                <div class="card-image">
+                    <span class="card-badge">الأكثر تقييماً</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.53.23 AM.jpeg" alt="المحاسبه الماليه المتقدمه">
+                </div>
+                <div class="card-content">
+                    <h3>المحاسبه الماليه المتقدمه</h3>
+                    <div class="card-university">جامعة طيبة</div>
+                    <div class="card-price">
+                        <span>100 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 8 -->
+            <div class="card" data-course-id="8" data-course-name="محاسبه متوسطه 2" data-course-price="90" data-university="جامعة القصيم">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.53.52 AM.jpeg" alt="محاسبه متوسطه 2">
+                </div>
+                <div class="card-content">
+                    <h3>محاسبه متوسطه 2</h3>
+                    <div class="card-university">جامعة القصيم</div>
+                    <div class="card-price">
+                        <span>90 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 9 -->
+            <div class="card" data-course-id="9" data-course-name="مبادئ الاقتصاد الجزئي" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <span class="card-badge">محدود</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.51 AM (2).jpeg" alt="مبادئ الاقتصاد الجزئي">
+                </div>
+                <div class="card-content">
+                    <h3>مبادئ الاقتصاد الجزئي</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 10 -->
+            <div class="card" data-course-id="10" data-course-name="الاحصاء التطبيقي" data-course-price="70" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.51 AM.jpeg" alt="الاحصاء التطبيقي">
+                </div>
+                <div class="card-content">
+                    <h3>الاحصاء التطبيقي</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>70 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 11 -->
+            <div class="card" data-course-id="11" data-course-name="محاسبه متوسطه 1" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <span class="card-badge">جديد</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.52 AM (1).jpeg" alt="محاسبه متوسطه 1">
+                </div>
+                <div class="card-content">
+                    <h3>محاسبه متوسطه 1</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 12 -->
+            <div class="card" data-course-id="12" data-course-name="رياضيات التمويل والاستثمار" data-course-price="70" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.52 AM (2).jpeg" alt="رياضيات التمويل والاستثمار">
+                </div>
+                <div class="card-content">
+                    <h3>رياضيات التمويل والاستثمار</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>70 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 13 -->
+            <div class="card" data-course-id="13" data-course-name="مبادئ الاحصاء للعلوم الانسانيه مع تطبيقات حاسوبيه" data-course-price="70" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <span class="card-badge">متميز</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.52 AM (3).jpeg" alt="مبادئ الاحصاء للعلوم الانسانيه مع تطبيقات حاسوبيه">
+                </div>
+                <div class="card-content">
+                    <h3>مبادئ الاحصاء للعلوم الانسانيه مع تطبيقات حاسوبيه</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>70 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 14 -->
+            <div class="card" data-course-id="14" data-course-name="الرياضيات للاقتصاد والعلوم الاداريه والماليه" data-course-price="100" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.52 AM.jpeg" alt="الرياضيات للاقتصاد والعلوم الاداريه والماليه">
+                </div>
+                <div class="card-content">
+                    <h3>الرياضيات للاقتصاد والعلوم الاداريه والماليه</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>100 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 15 -->
+            <div class="card" data-course-id="15" data-course-name="محاسبة المنشات الماليه" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <span class="card-badge">الأكثر مبيعاً</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.53 AM (1).jpeg" alt="محاسبة المنشات الماليه">
+                </div>
+                <div class="card-content">
+                    <h3>محاسبة المنشات الماليه</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 16 -->
+            <div class="card" data-course-id="16" data-course-name="محاسبه متوسطة 2 الفصل الحادي عشر الاتزامات المتداولة والمحتملة" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.53 AM (2).jpeg" alt="محاسبه متوسطة 2 الفصل الحادي عشر الاتزامات المتداولة والمحتملة">
+                </div>
+                <div class="card-content">
+                    <h3>محاسبه متوسطة 2 الفصل الحادي عشر الاتزامات المتداولة والمحتملة</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 17 -->
+            <div class="card" data-course-id="17" data-course-name="ادارة مالية 2" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <span class="card-badge">الأكثر تقييماً</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.55 AM (1).jpeg" alt="ادارة مالية 2">
+                </div>
+                <div class="card-content">
+                    <h3>ادارة مالية 2</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 18 -->
+            <div class="card" data-course-id="18" data-course-name="مفاهيم واهداف محاسبة التكاليف" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.55 AM.jpeg" alt="مفاهيم واهداف محاسبة التكاليف">
+                </div>
+                <div class="card-content">
+                    <h3>مفاهيم واهداف محاسبة التكاليف</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== GROUP 2 ===== -->
+        <div class="cards-group" id="group2">
+            <!-- كارد 19 -->
+            <div class="card" data-course-id="19" data-course-name="محاسبه متوسطه 1" data-course-price="80" data-university="جامعة أم القرى">
+                <div class="card-image">
+                    <span class="card-badge">الأكثر مبيعاً</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.54.07 AM.jpeg" alt="محاسبه متوسطه 1">
+                </div>
+                <div class="card-content">
+                    <h3>محاسبه متوسطه 1</h3>
+                    <div class="card-desc">محاسبه علي اساس الاستحقاق</div>
+                    <div class="card-university">جامعة أم القرى</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 20 -->
+            <div class="card" data-course-id="20" data-course-name="محاسبة" data-course-price="80" data-university="جامعة الطائف">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.54.22 AM (1).jpeg" alt="محاسبة">
+                </div>
+                <div class="card-content">
+                    <h3>محاسبة</h3>
+                    <div class="card-university">جامعة الطائف</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 21 -->
+            <div class="card" data-course-id="21" data-course-name="محاسبه التكاليف" data-course-price="20" data-university="جامعة الطائف">
+                <div class="card-image">
+                    <span class="card-badge">عرض خاص</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.54.22 AM (2).jpeg" alt="محاسبه التكاليف">
+                </div>
+                <div class="card-content">
+                    <h3>محاسبه التكاليف</h3>
+                    <div class="card-university">جامعة الطائف</div>
+                    <div class="card-price">
+                        <span>20 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 22 -->
+            <div class="card" data-course-id="22" data-course-name="المحاسبه المتوسطه الجزء الثاني" data-course-price="80" data-university="جامعة الطائف">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.54.22 AM.jpeg" alt="المحاسبه المتوسطه الجزء الثاني">
+                </div>
+                <div class="card-content">
+                    <h3>المحاسبه المتوسطه الجزء الثاني</h3>
+                    <div class="card-desc">أمثلة</div>
+                    <div class="card-university">جامعة الطائف</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 23 -->
+            <div class="card" data-course-id="23" data-course-name="المحاسبه المتوسطه الجزء الاول" data-course-price="80" data-university="جامعة الطائف">
+                <div class="card-image">
+                    <span class="card-badge">جديد</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.54.23 AM (1).jpeg" alt="المحاسبه المتوسطه الجزء الاول">
+                </div>
+                <div class="card-content">
+                    <h3>المحاسبه المتوسطه الجزء الاول</h3>
+                    <div class="card-university">جامعة الطائف</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 24 -->
+            <div class="card" data-course-id="24" data-course-name="مبادئ الخطر والتامين" data-course-price="20" data-university="جامعة الطائف">
+                <div class="card-image">
+                    <span class="card-badge">عرض خاص</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.54.23 AM (2).jpeg" alt="مبادئ الخطر والتامين">
+                </div>
+                <div class="card-content">
+                    <h3>مبادئ الخطر والتامين</h3>
+                    <div class="card-university">جامعة الطائف</div>
+                    <div class="card-price">
+                        <span>20 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 25 -->
+            <div class="card" data-course-id="25" data-course-name="الاحصاء التطبيقي" data-course-price="70" data-university="جامعة الطائف">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.54.23 AM.jpeg" alt="الاحصاء التطبيقي">
+                </div>
+                <div class="card-content">
+                    <h3>الاحصاء التطبيقي</h3>
+                    <div class="card-university">جامعة الطائف</div>
+                    <div class="card-price">
+                        <span>70 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 26 -->
+            <div class="card" data-course-id="26" data-course-name="مبادئ الادارة الماليه" data-course-price="90" data-university="جامعة الملك فيصل">
+                <div class="card-image">
+                    <span class="card-badge">متميز</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 3.55.02 AM (1).jpeg" alt="مبادئ الادارة الماليه">
+                </div>
+                <div class="card-content">
+                    <h3>مبادئ الادارة الماليه</h3>
+                    <div class="card-desc">تطبيقات</div>
+                    <div class="card-university">جامعة الملك فيصل</div>
+                    <div class="card-price">
+                        <span>90 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 27 -->
+            <div class="card" data-course-id="27" data-course-name="المحاسبه الماليه دبلوم" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.01.51 AM (2).jpeg" alt="المحاسبه الماليه دبلوم">
+                </div>
+                <div class="card-content">
+                    <h3>المحاسبه الماليه دبلوم</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 28 -->
+            <div class="card" data-course-id="28" data-course-name="مبادئ المحاسبه" data-course-price="70" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <span class="card-badge">محدود</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.01.51 AM.jpeg" alt="مبادئ المحاسبه">
+                </div>
+                <div class="card-content">
+                    <h3>مبادئ المحاسبه</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>70 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 29 -->
+            <div class="card" data-course-id="29" data-course-name="Business Combinations" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.50 AM.jpeg" alt="Business Combinations">
+                </div>
+                <div class="card-content">
+                    <h3>Business Combinations</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 30 -->
+            <div class="card" data-course-id="30" data-course-name="محاسبه تكاليف وادارية" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <span class="card-badge">الأكثر تقييماً</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.51 AM (1).jpeg" alt="محاسبه تكاليف وادارية">
+                </div>
+                <div class="card-content">
+                    <h3>محاسبه تكاليف وادارية</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 31 -->
+            <div class="card" data-course-id="31" data-course-name="ادارة ماليه 1" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.53 AM.jpeg" alt="ادارة ماليه 1">
+                </div>
+                <div class="card-content">
+                    <h3>ادارة ماليه 1</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 32 -->
+            <div class="card" data-course-id="32" data-course-name="محاسبة الزكاة والضريبة" data-course-price="70" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <span class="card-badge">جديد</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.54 AM (1).jpeg" alt="محاسبة الزكاة والضريبة">
+                </div>
+                <div class="card-content">
+                    <h3>محاسبة الزكاة والضريبة</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>70 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 33 -->
+            <div class="card" data-course-id="33" data-course-name="المحاسبة عن عمليات البضاعة" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.54 AM (2).jpeg" alt="المحاسبة عن عمليات البضاعة">
+                </div>
+                <div class="card-content">
+                    <h3>المحاسبة عن عمليات البضاعة</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+
+            <!-- كارد 34 -->
+            <div class="card" data-course-id="34" data-course-name="تحليل قائمه المركز المالي" data-course-price="80" data-university="جامعة الملك خالد">
+                <div class="card-image">
+                    <span class="card-badge">متميز</span>
+                    <img src="./IMG/WhatsApp Image 2026-01-17 at 4.12.54 AM.jpeg" alt="تحليل قائمه المركز المالي">
+                </div>
+                <div class="card-content">
+                    <h3>تحليل قائمه المركز المالي</h3>
+                    <div class="card-university">جامعة الملك خالد</div>
+                    <div class="card-price">
+                        <span>80 ريال</span>
+                    </div>
+                    <button class="subscribe-btn add-to-cart-btn">اشترك</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARROWS -->
+    <div class="slider-arrows">
+        <button id="prev"><i class="fas fa-chevron-right"></i></button>
+        <button id="next"><i class="fas fa-chevron-left"></i></button>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-section">
+            <h3>عن ابتكر</h3>
+            <p>منصة تعليمية رائدة تقدم أفضل الكورسات والمواد الجامعية</p>
+        </div>
+        
+        <div class="footer-section">
+            <h3>روابط سريعة</h3>
+            <a href="index.html">الرئيسية</a>
+            <a href="index.html#courses">الكورسات</a>
+            <a href="index.html#about">عنّا</a>
+            <a href="index.html#contact">اتصل بنا</a>
+        </div>
+        
+        <div class="footer-section">
+            <h3>التخصصات</h3>
+            <a href="university.html">مواد جامعية</a>
+            <a href="university.html">كورسات متنوعة</a>
+        </div>
+        
+       
+    </div>
+    
+    <div class="footer-bottom">
+        <p>© 2026 ابتكر. جميع الحقوق محفوظة</p>
+    </div>
+</footer>
+
+<!-- Checkout Modal -->
+<div class="checkout-modal" id="checkoutModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-shopping-bag"></i> تأكيد الطلب</h3>
+            <button class="close-modal" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="order-summary" id="orderSummary">
+            <!-- Order items will be inserted here -->
+        </div>
+        
+        <form id="checkoutForm" class="checkout-form">
+            <div class="form-group">
+                <label for="name"><i class="fas fa-user"></i> الاسم الكامل</label>
+                <input type="text" id="name" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                <input type="email" id="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone"><i class="fas fa-phone"></i> رقم الهاتف</label>
+                <input type="tel" id="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="payment"><i class="fas fa-credit-card"></i> طريقة الدفع</label>
+                <select id="payment" required>
+                    <option value="">اختر طريقة الدفع</option>
+                    <option value="card">بطاقة ائتمان</option>
+                    <option value="bank">تحويل بنكي</option>
+                    <option value="vodafone">فودافون كاش</option>
+                </select>
+            </div>
+        </form>
+        
+        <div class="modal-actions">
+            <button class="modal-btn cancel" id="cancelOrder">إلغاء</button>
+            <button class="modal-btn confirm" id="confirmOrder">تأكيد الطلب</button>
+        </div>
+    </div>
+</div>
+<a href="https://wa.me/201015117547" target="_blank" class="whatsapp-chat">
+    <i class="fab fa-whatsapp"></i>
+</a>
+<script src="./js/university.js"></script>
+</body>
+</html>

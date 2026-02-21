@@ -1,0 +1,3594 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المسؤول - منصة التعلم</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f4f7fc;
+            min-height: 100vh;
+        }
+
+        /* ========== ACCESS DENIED ========== */
+        .access-denied {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .access-denied-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .access-denied-card i {
+            font-size: 60px;
+            color: #f44336;
+            margin-bottom: 20px;
+        }
+
+        .access-denied-card h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .access-denied-card p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .access-denied-card button {
+            background: linear-gradient(135deg, #D4AF37, #b4943c);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .access-denied-card button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(212,175,55,0.4);
+        }
+
+        /* ========== ADMIN DASHBOARD ========== */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* ===== Sidebar ===== */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #1a1f2b 0%, #2d3341 100%);
+            color: white;
+            padding: 25px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+
+        .sidebar-header {
+            text-align: center;
+            padding-bottom: 25px;
+            border-bottom: 2px solid rgba(212,175,55,0.3);
+            margin-bottom: 25px;
+        }
+
+        .sidebar-header i {
+            font-size: 50px;
+            color: #D4AF37;
+            margin-bottom: 15px;
+        }
+
+        .sidebar-header h3 {
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+
+        .sidebar-header p {
+            color: #D4AF37;
+            font-size: 14px;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: #a0a6b5;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            gap: 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .nav-link i {
+            width: 24px;
+            font-size: 18px;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(212,175,55,0.15);
+            color: #D4AF37;
+        }
+
+        .nav-link.logout {
+            margin-top: 30px;
+            color: #f44336;
+            border-top: 1px solid #3a4050;
+            padding-top: 20px;
+        }
+
+        .nav-link.logout:hover {
+            background: rgba(244,67,54,0.15);
+            color: #f44336;
+        }
+
+        /* ===== Main Content ===== */
+        .main-content {
+            flex: 1;
+            margin-right: 280px;
+            padding: 30px;
+            transition: all 0.3s;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 24px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            color: #D4AF37;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .admin-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #D4AF37, #b4943c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .admin-info h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .admin-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .stat-info h3 {
+            color: #666;
+            font-size: 14px;
+            font-weight: normal;
+            margin-bottom: 10px;
+        }
+
+        .stat-info .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(212,175,55,0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #D4AF37;
+            font-size: 24px;
+        }
+
+        /* Charts Row */
+        .charts-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+
+        .chart-card h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-card h3 i {
+            color: #D4AF37;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        /* Tables */
+        .table-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .table-header h3 {
+            color: #333;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #D4AF37, #b4943c);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212,175,55,0.4);
+        }
+
+        .btn-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-success {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .btn-info {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 5px 15px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            padding: 10px;
+            width: 250px;
+            outline: none;
+        }
+
+        .search-box i {
+            color: #666;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: right;
+            padding: 15px 10px;
+            background: #f8f9fa;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 15px 10px;
+            border-bottom: 1px solid #eee;
+            color: #666;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideIn 0.3s ease;
+            border: 3px solid #D4AF37;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .modal-header h2 {
+            color: #333;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            border-color: #D4AF37;
+            outline: none;
+        }
+
+        .discount-preview {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .original-price {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 18px;
+        }
+
+        .discounted-price {
+            color: #4CAF50;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #D4AF37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Notifications */
+        .admin-notification {
+            position: fixed;
+            top: 100px;
+            left: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+            z-index: 10001;
+            animation: slideInLeft 0.3s ease;
+            font-weight: bold;
+            max-width: 400px;
+        }
+
+        .admin-notification.error {
+            background: #f44336;
+        }
+
+        .admin-notification.warning {
+            background: #ff9800;
+        }
+
+        .admin-notification.info {
+            background: #2196F3;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
+                padding: 20px 10px;
+            }
+
+            .sidebar-header h3,
+            .sidebar-header p,
+            .nav-link span {
+                display: none;
+            }
+
+            .nav-link {
+                justify-content: center;
+                padding: 12px;
+            }
+
+            .nav-link i {
+                margin: 0;
+                font-size: 20px;
+            }
+
+            .main-content {
+                margin-right: 80px;
+            }
+
+            .charts-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .table-actions {
+                flex-direction: column;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        /* Lesson Management Styles */
+.lesson-thumbnail {
+    width: 80px;
+    height: 45px;
+    border-radius: 5px;
+    object-fit: cover;
+    background: #f0f0f0;
+}
+
+.video-preview {
+    width: 100%;
+    max-height: 300px;
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 30px;
+    background: #f0f0f0;
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 15px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(135deg, #D4AF37, #b4943c);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    transition: width 0.3s ease;
+}
+
+.upload-area {
+    border: 2px dashed #D4AF37;
+    border-radius: 10px;
+    padding: 30px;
+    text-align: center;
+    background: #fef9e7;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-bottom: 20px;
+}
+
+.upload-area:hover {
+    background: #fef3d9;
+    border-color: #b4943c;
+}
+
+.upload-area i {
+    font-size: 48px;
+    color: #D4AF37;
+    margin-bottom: 15px;
+}
+
+.upload-area h4 {
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.upload-area p {
+    color: #666;
+    font-size: 14px;
+}
+
+.file-info {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.file-info i {
+    font-size: 40px;
+    color: #D4AF37;
+}
+
+.file-details {
+    flex: 1;
+}
+
+.file-name {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.file-size {
+    color: #666;
+    font-size: 12px;
+}
+
+.upload-status {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 15px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.status-icon {
+    font-size: 24px;
+}
+
+.status-icon.success { color: #4CAF50; }
+.status-icon.error { color: #f44336; }
+.status-icon.uploading { color: #D4AF37; animation: spin 2s linear infinite; }
+
+.status-message {
+    flex: 1;
+    color: #333;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+    </style>
+</head>
+<body>
+    <!-- Access Denied Page -->
+    <div id="accessDeniedPage" style="display: none;">
+        <div class="access-denied">
+            <div class="access-denied-card">
+                <i class="fas fa-lock"></i>
+                <h2>وصول غير مصرح</h2>
+                <p>عذراً، هذه الصفحة مخصصة للمسؤولين فقط. سيتم تحويلك إلى الصفحة الرئيسية...</p>
+                <button onclick="window.location.href='index.html'">
+                    <i class="fas fa-home"></i>
+                    العودة للرئيسية
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="dashboard-container" style="display: none;">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-graduation-cap"></i>
+                <h3>منصة التعلم</h3>
+                <p>لوحة التحكم</p>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a class="nav-link active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>لوحة الإحصائيات</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-section="users">
+                        <i class="fas fa-users"></i>
+                        <span>المستخدمين</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-section="courses">
+                        <i class="fas fa-book"></i>
+                        <span>الكورسات</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-section="sales">
+                        <i class="fas fa-chart-line"></i>
+                        <span>المبيعات</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-section="discounts">
+                        <i class="fas fa-tags"></i>
+                        <span>الخصومات</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-section="activities">
+                        <i class="fas fa-history"></i>
+                        <span>النشاطات</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-section="lessons">
+                        <i class="fas fa-video"></i>
+                        <span>الدروس</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link logout" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>تسجيل الخروج</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span id="currentSectionTitle">لوحة الإحصائيات</span>
+                </div>
+                <div class="admin-profile">
+                    <div class="admin-info">
+                        <h4 id="adminName">المسؤول</h4>
+                        <p id="adminEmail">admin@example.com</p>
+                    </div>
+                    <div class="admin-avatar" id="adminAvatar">A</div>
+                </div>
+            </div>
+
+            <!-- Dynamic Content -->
+            <div id="dynamicContent"></div>
+        </div>
+    </div>
+
+    <!-- Add Course Modal -->
+    <div id="addCourseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>
+                    <i class="fas fa-plus-circle"></i>
+                    إضافة كورس جديد
+                </h2>
+                <button class="close-modal" onclick="closeAddCourseModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="addCourseForm">
+                <div class="form-group">
+                    <label>عنوان الكورس</label>
+                    <input type="text" id="courseTitle" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>الوصف</label>
+                    <textarea id="courseDescription" class="form-control" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>الجامعة</label>
+                    <input type="text" id="courseUniversity" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>السعر</label>
+                    <input type="number" id="coursePrice" class="form-control" min="0" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>صورة الكورس</label>
+                    <input type="file" id="courseImage" class="form-control" accept="image/*">
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i>
+                        إضافة الكورس
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="closeAddCourseModal()">
+                        <i class="fas fa-times"></i>
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Course Modal -->
+    <div id="editCourseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>
+                    <i class="fas fa-edit"></i>
+                    تعديل الكورس
+                </h2>
+                <button class="close-modal" onclick="closeEditCourseModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="editCourseForm">
+                <input type="hidden" id="editCourseId">
+                
+                <div class="form-group">
+                    <label>عنوان الكورس</label>
+                    <input type="text" id="editCourseTitle" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>الوصف</label>
+                    <textarea id="editCourseDescription" class="form-control" rows="3" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>الجامعة</label>
+                    <input type="text" id="editCourseUniversity" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>السعر</label>
+                    <input type="number" id="editCoursePrice" class="form-control" min="0" required>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i>
+                        حفظ التغييرات
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="closeEditCourseModal()">
+                        <i class="fas fa-times"></i>
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Discount Modal -->
+    <div id="discountModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>
+                    <i class="fas fa-tags"></i>
+                    إضافة خصم
+                </h2>
+                <button class="close-modal" onclick="closeDiscountModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="discountForm">
+                <div class="form-group">
+                    <label>الكورس</label>
+                    <select id="discountCourse" class="form-control" required>
+                        <option value="">اختر الكورس</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>نسبة الخصم (%)</label>
+                    <input type="number" id="discountPercentage" class="form-control" min="0" max="100" step="1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>تاريخ البداية</label>
+                    <input type="datetime-local" id="discountStartDate" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>تاريخ النهاية</label>
+                    <input type="datetime-local" id="discountEndDate" class="form-control" required>
+                </div>
+                
+                <div class="discount-preview" id="discountPreview">
+                    <div class="original-price" id="originalPrice">200 ريال</div>
+                    <div class="discounted-price" id="discountedPrice">150 ريال</div>
+                    <div style="color: #666; margin-top: 10px;">بعد الخصم</div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-check"></i>
+                        حفظ الخصم
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="closeDiscountModal()">
+                        <i class="fas fa-times"></i>
+                        إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ========== CONFIGURATION ==========
+        const API_BASE_URL = 'https://localhost:44360';
+        const ADMIN_EMAIL = "admin@gmail.com";
+        
+        // ========== STATE MANAGEMENT ==========
+        let authToken = localStorage.getItem('authToken');
+        let isAdmin = false;
+        let currentSection = 'dashboard';
+        let charts = {};
+        
+        let adminToken = null;
+        // ========== CHECK ADMIN ACCESS ==========
+        function checkAdminStatus() {
+        const userEmail = localStorage.getItem("userEmail");
+        const token = localStorage.getItem("authToken");
+        const role = localStorage.getItem("userRole");
+        
+        isAdmin = (userEmail === ADMIN_EMAIL || role === "Admin");
+        adminToken = token;
+        
+        console.log("🔍 Admin check:", {
+            email: userEmail,
+            role: role,
+            isAdmin: isAdmin,
+            hasToken: !!token
+        });
+        
+        return isAdmin;
+    }
+    
+        // ========== INITIALIZE PAGE ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            if (checkAdminStatus()) {
+                // Show dashboard
+                document.getElementById('accessDeniedPage').style.display = 'none';
+                document.getElementById('dashboardPage').style.display = 'flex';
+                
+                // Update admin info
+                const adminEmail = localStorage.getItem('userEmail') || ADMIN_EMAIL;
+                const adminName = localStorage.getItem('userName') || 'المسؤول';
+                
+                document.getElementById('adminEmail').textContent = adminEmail;
+                document.getElementById('adminName').textContent = adminName;
+                document.getElementById('adminAvatar').textContent = adminName.charAt(0).toUpperCase();
+                
+                // Load dashboard data
+                loadDashboardData();
+            } else {
+                // Show access denied and redirect after 3 seconds
+                document.getElementById('accessDeniedPage').style.display = 'flex';
+                document.getElementById('dashboardPage').style.display = 'none';
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 3000);
+            }
+        });
+
+        // ========== NAVIGATION ==========
+        document.querySelectorAll('.nav-link[data-section]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active class
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Get section
+                const section = this.getAttribute('data-section');
+                currentSection = section;
+                
+                // Update title
+                const titles = {
+                    'dashboard': 'لوحة الإحصائيات',
+                    'users': 'إدارة المستخدمين',
+                    'courses': 'إدارة الكورسات',
+                    'sales': 'المبيعات',
+                    'discounts': 'الخصومات',
+                    'activities': 'النشاطات'
+                    
+                };
+                document.getElementById('currentSectionTitle').textContent = titles[section] || section;
+                
+                // Load section content
+                loadSection(section);
+            });
+        });
+
+        // ========== LOGOUT ==========
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+    // فقط التوجيه إلى الصفحة الرئيسية بدون مسح أي بيانات
+    window.location.href = 'index.html';
+});
+
+        // ========== LOAD SECTION ==========
+        async function loadSection(section) {
+            const content = document.getElementById('dynamicContent');
+            
+            switch(section) {
+                case 'dashboard':
+                    content.innerHTML = getDashboardHTML();
+                    loadDashboardStats();
+                    break;
+                case 'users':
+                    content.innerHTML = getUsersHTML();
+                    loadUsers();
+                    break;
+                case 'courses':
+                    content.innerHTML = getCoursesHTML();
+                    loadCourses();
+                    break;
+                case 'sales':
+                    content.innerHTML = getSalesHTML();
+                    loadSalesData();
+                    break;
+                case 'discounts':
+                    content.innerHTML = getDiscountsHTML();
+                    loadDiscounts();
+                    loadCoursesForDiscount();
+                    break;
+                case 'activities':
+                    content.innerHTML = getActivitiesHTML();
+                    loadActivities();
+                    break;
+                case 'notifications':
+                    content.innerHTML = getNotificationsHTML();
+                    loadNotifications();
+                    break;
+            }
+        }
+
+        // ========== LOAD DASHBOARD DATA ==========
+        async function loadDashboardData() {
+            await loadSection(currentSection);
+        }
+
+        // ========== DASHBOARD ==========
+        function getDashboardHTML() {
+            return `
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>إجمالي المستخدمين</h3>
+                            <div class="stat-number" id="totalUsers">0</div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>إجمالي الكورسات</h3>
+                            <div class="stat-number" id="totalCourses">0</div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>إجمالي المبيعات</h3>
+                            <div class="stat-number" id="totalSales">0 ريال</div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>عدد المشتريات</h3>
+                            <div class="stat-number" id="totalPurchases">0</div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <h3>
+                            <i class="fas fa-chart-pie"></i>
+                            توزيع المستخدمين
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="usersChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3>
+                            <i class="fas fa-chart-bar"></i>
+                            المبيعات الشهرية
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="salesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Activities -->
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>
+                            <i class="fas fa-history"></i>
+                            آخر النشاطات
+                        </h3>
+                    </div>
+                    <div id="recentActivities">
+                        <div style="text-align: center; padding: 30px;">
+                            <div class="loading-spinner"></div>
+                            <p style="margin-top: 15px;">جاري تحميل النشاطات...</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadDashboardStats() {
+            try {
+                console.log("---------------------------");
+                // Load stats from admin endpoints
+                const stats = await apiRequest(`/api/admin/stats`);
+                console.log(stats);
+                const activities = await apiRequest(`/api/admin/activities`);
+                console.log(activities);
+                const usersSummary = await apiRequest(`/api/admin/users/summary`);
+                console.log(usersSummary);
+                const coursesSummary = await apiRequest(`/api/admin/courses/summary`);
+                console.log(coursesSummary);
+                const salesSummary = await apiRequest(`/api/admin/sales/summary`);
+                console.log(salesSummary);
+                
+
+                // Update stats
+                document.getElementById('totalUsers').textContent = stats?.totalUsers || 0;
+                document.getElementById('totalCourses').textContent = stats?.totalCourses || 0;
+                document.getElementById('totalSales').textContent = (stats?.totalSales || 0) + ' ريال';
+                document.getElementById('totalPurchases').textContent = stats?.totalPurchases || 0;
+                
+                // Update recent activities
+                displayRecentActivities(activities);
+                
+                // Initialize charts
+                initUsersChart(usersSummary);
+                initSalesChart(salesSummary);
+                
+            } catch (error) {
+                console.error('Error loading dashboard stats:', error);
+                showNotification('فشل تحميل الإحصائيات', 'error');
+            }
+        }
+
+        function displayRecentActivities(activities) {
+            const container = document.getElementById('recentActivities');
+            
+            if (!activities || activities.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 30px; color: #666;">
+                        <i class="fas fa-history" style="font-size: 40px; margin-bottom: 10px;"></i>
+                        <p>لا توجد نشاطات حديثة</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let html = '<table><thead><tr><th>المستخدم</th><th>النشاط</th><th>التاريخ</th></tr></thead><tbody>';
+            
+            activities.slice(0, 10).forEach(activity => {
+                html += `
+                    <tr>
+                        <td>${activity.userName || 'غير معروف'}</td>
+                        <td>${activity.action || activity.description || 'نشاط'}</td>
+                        <td>${formatDate(activity.timestamp || activity.createdAt)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function initUsersChart(data) {
+            const ctx = document.getElementById('usersChart').getContext('2d');
+            
+            if (charts.usersChart) {
+                charts.usersChart.destroy();
+            }
+            
+            charts.usersChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['مستخدمين جدد', 'مستخدمين نشطين', 'مستخدمين غير نشطين'],
+                    datasets: [{
+                        data: [
+                            data?.newUsers || 0,
+                            data?.activeUsers || 0,
+                            data?.inactiveUsers || 0
+                        ],
+                        backgroundColor: ['#4CAF50', '#2196F3', '#f44336'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        function initSalesChart(data) {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            
+            if (charts.salesChart) {
+                charts.salesChart.destroy();
+            }
+            
+            const months = ['يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو', 
+                           'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+            
+            charts.salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [{
+                        label: 'المبيعات',
+                        data: data?.monthlySales || Array(12).fill(0),
+                        borderColor: '#D4AF37',
+                        backgroundColor: 'rgba(212,175,55,0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        }
+
+        // ========== USERS MANAGEMENT ==========
+        function getUsersHTML() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>
+                            <i class="fas fa-users"></i>
+                            قائمة المستخدمين
+                        </h3>
+                        <div class="table-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchUsers" placeholder="بحث عن مستخدم...">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="usersList">
+                        <div style="text-align: center; padding: 50px;">
+                            <div class="loading-spinner"></div>
+                            <p style="margin-top: 15px;">جاري تحميل المستخدمين...</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+       async function loadUsers() {
+    try {
+        // استخدم endpoint المستخدمين الجديد
+        const users = await apiRequest('/api/admin/users');
+        console.log("📋 Users list:", users);
+        
+        const container = document.getElementById('usersList');
+        
+        if (!users || users.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 50px; color: #666;">
+                    <i class="fas fa-users" style="font-size: 50px; margin-bottom: 15px;"></i>
+                    <p>لا يوجد مستخدمين</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '<table><thead><tr><th>الاسم</th><th>البريد الإلكتروني</th><th>الدور</th><th>تاريخ التسجيل</th><th>الحالة</th><th>الإجراءات</th></tr></thead><tbody>';
+        
+        users.forEach(user => {
+            const status = user.isActive ? 'نشط' : 'غير نشط';
+            const statusClass = user.isActive ? 'status-active' : 'status-inactive';
+            
+            html += `
+                <tr>
+                    <td>${user.fullName || user.userName || 'غير معروف'}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role || 'مستخدم'}</td>
+                    <td>${formatDate(user.createdAt)}</td>
+                    <td><span class="status-badge ${statusClass}">${status}</span></td>
+                    <td class="action-buttons">
+                        <button class="btn btn-sm btn-primary" onclick="viewUserCourses('${user.id}')">
+                            <i class="fas fa-book"></i>
+                        </button>
+                        <button class="btn btn-sm btn-info" onclick="viewUserPurchases('${user.id}')">
+                            <i class="fas fa-shopping-cart"></i>
+                        </button>
+                        ${user.role !== 'Admin' ? `
+                            <button class="btn btn-sm btn-danger" onclick="deleteUser('${user.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : ''}
+                    </td>
+                </tr>
+            `;
+        });
+        
+        html += '</tbody></table>';
+        container.innerHTML = html;
+        
+        // Add search functionality
+        const searchInput = document.getElementById('searchUsers');
+        if (searchInput) {
+            // Remove old listener and add new one
+            searchInput.replaceWith(searchInput.cloneNode(true));
+            document.getElementById('searchUsers').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#usersList tbody tr');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+        }
+        
+    } catch (error) {
+        console.error('❌ Error loading users:', error);
+        showNotification('فشل تحميل المستخدمين: ' + error.message, 'error');
+        
+        document.getElementById('usersList').innerHTML = `
+            <div style="text-align: center; padding: 50px; color: #f44336;">
+                <i class="fas fa-exclamation-circle" style="font-size: 50px; margin-bottom: 15px;"></i>
+                <p>فشل تحميل المستخدمين</p>
+                <p style="font-size: 14px; color: #999;">${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+        // ========== COURSES MANAGEMENT ==========
+        function getCoursesHTML() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>
+                            <i class="fas fa-book"></i>
+                            قائمة الكورسات
+                        </h3>
+                        <div class="table-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchCourses" placeholder="بحث عن كورس...">
+                            </div>
+                            <button class="btn btn-primary" onclick="openAddCourseModal()">
+                                <i class="fas fa-plus-circle"></i>
+                                إضافة كورس
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="coursesList">
+                        <div style="text-align: center; padding: 50px;">
+                            <div class="loading-spinner"></div>
+                            <p style="margin-top: 15px;">جاري تحميل الكورسات...</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadCourses() {
+            try {
+                const courses = await apiRequest('/api/course');
+                
+                const container = document.getElementById('coursesList');
+                
+                if (!courses || courses.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 50px; color: #666;">
+                            <i class="fas fa-book" style="font-size: 50px; margin-bottom: 15px;"></i>
+                            <p>لا توجد كورسات</p>
+                            <button class="btn btn-primary" onclick="openAddCourseModal()" style="margin-top: 15px;">
+                                <i class="fas fa-plus-circle"></i>
+                                إضافة أول كورس
+                            </button>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '<table><thead><tr><th>الصورة</th><th>العنوان</th><th>الجامعة</th><th>السعر</th><th>عدد المشتركين</th><th>الإجراءات</th></tr></thead><tbody>';
+                
+                courses.forEach(course => {
+                    html += `
+                        <tr>
+                            <td>
+                                <img src="${buildImageUrl(course.imageUrl)}" alt="${course.title}" style="width: 50px; height: 50px; border-radius: 5px; object-fit: cover;">
+                            </td>
+                            <td>${course.title}</td>
+                            <td>${course.university}</td>
+                            <td>${course.price} ريال</td>
+                            <td>${course.enrolledCount || 0}</td>
+                            <td class="action-buttons">
+                                <button class="btn btn-sm btn-primary" onclick="editCourse('${course.id}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning" onclick="applyDiscount('${course.id}')">
+                                    <i class="fas fa-tags"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteCourse('${course.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                container.innerHTML = html;
+                
+                // Add search functionality
+                document.getElementById('searchCourses').addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('#coursesList tbody tr');
+                    
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+                
+            } catch (error) {
+                console.error('Error loading courses:', error);
+                showNotification('فشل تحميل الكورسات', 'error');
+            }
+        }
+
+        // ========== SALES MANAGEMENT ==========
+        function getSalesHTML() {
+            return `
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>إجمالي المبيعات</h3>
+                            <div class="stat-number" id="totalSalesAmount">0 ريال</div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>عدد المشتريات</h3>
+                            <div class="stat-number" id="totalPurchasesCount">0</div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>متوسط سعر الكورس</h3>
+                            <div class="stat-number" id="averagePrice">0 ريال</div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>أعلى مبيعات</h3>
+                            <div class="stat-number" id="topSelling">-</div>
+                        </div>
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <h3>
+                            <i class="fas fa-chart-bar"></i>
+                            المبيعات اليومية
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="dailySalesChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <h3>
+                            <i class="fas fa-chart-pie"></i>
+                            توزيع المبيعات حسب الجامعات
+                        </h3>
+                        <div class="chart-container">
+                            <canvas id="universitySalesChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>
+                            <i class="fas fa-history"></i>
+                            آخر المشتريات
+                        </h3>
+                    </div>
+                    <div id="recentPurchases">
+                        <div style="text-align: center; padding: 30px;">
+                            <div class="loading-spinner"></div>
+                            <p style="margin-top: 15px;">جاري تحميل المشتريات...</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadSalesData() {
+    try {
+        // جلب ملخص المبيعات (مصفوفة تحتوي على كائن واحد)
+        const salesSummaryArray = await apiRequest('/api/admin/sales/summary');
+        console.log("📊 Sales summary array:", salesSummaryArray);
+        
+        // استخراج الكائن الأول من المصفوفة
+        const salesSummary = Array.isArray(salesSummaryArray) && salesSummaryArray.length > 0 
+            ? salesSummaryArray[0] 
+            : {};
+        
+        console.log("📊 Sales summary object:", salesSummary);
+        
+        // جلب جميع المشتريات
+        let purchases = [];
+        try {
+            const purchasesResponse = await apiRequest('/api/users/purchases');
+            console.log("📦 Purchases response:", purchasesResponse);
+            
+            // استخراج المشتريات من الاستجابة
+            if (Array.isArray(purchasesResponse)) {
+                purchases = purchasesResponse;
+            } else if (purchasesResponse?.purchases && Array.isArray(purchasesResponse.purchases)) {
+                purchases = purchasesResponse.purchases;
+            } else if (purchasesResponse?.data && Array.isArray(purchasesResponse.data)) {
+                purchases = purchasesResponse.data;
+            }
+        } catch (e) {
+            console.error("❌ Failed to load purchases:", e);
+            // لا نستخدم بيانات تجريبية، فقط نترك purchases كمصفوفة فارغة
+            purchases = [];
+        }
+        
+        // تحديث الإحصائيات
+        updateSalesStats(salesSummary);
+        
+        // رسم المخططات
+        initSalesCharts(salesSummary);
+        
+        // عرض المشتريات
+        displayRecentPurchases(purchases);
+        
+    } catch (error) {
+        console.error('❌ Error loading sales data:', error);
+        showNotification('فشل تحميل بيانات المبيعات: ' + error.message, 'error');
+        
+        // في حالة الفشل، نظهر رسالة خطأ للمستخدم
+        showSalesErrorMessage();
+    }
+}
+
+// دالة لتحديث إحصائيات المبيعات
+function updateSalesStats(salesSummary) {
+    console.log("📊 Updating stats with:", salesSummary);
+    
+    // تحديث إجمالي المبيعات
+    const totalSalesElement = document.getElementById('totalSalesAmount');
+    if (totalSalesElement) {
+        const totalRevenue = salesSummary?.totalRevenue || 0;
+        totalSalesElement.textContent = totalRevenue > 0 ? totalRevenue + ' ريال' : '0 ريال';
+    }
+    
+    // تحديث عدد المشتريات
+    const totalPurchasesElement = document.getElementById('totalPurchasesCount');
+    if (totalPurchasesElement) {
+        totalPurchasesElement.textContent = salesSummary?.totalSales || 0;
+    }
+    
+    // تحديث متوسط سعر الكورس
+    const averagePriceElement = document.getElementById('averagePrice');
+    if (averagePriceElement) {
+        const avgPrice = salesSummary?.averageOrderValue || 0;
+        averagePriceElement.textContent = avgPrice > 0 ? avgPrice + ' ريال' : '0 ريال';
+    }
+    
+    // تحديث أفضل كورس مبيعاً
+    const topSellingElement = document.getElementById('topSelling');
+    if (topSellingElement) {
+        topSellingElement.textContent = salesSummary?.topSellingCourse || '-';
+    }
+}
+
+// دالة لرسم المخططات
+function initSalesCharts(salesSummary) {
+    // رسم المخطط اليومي
+    if (salesSummary?.dailySales && Array.isArray(salesSummary.dailySales)) {
+        initDailySalesChart(salesSummary.dailySales);
+    } else {
+        // إذا لم توجد بيانات، نخفي المخطط أو نظهر رسالة
+        hideChart('dailySalesChart');
+    }
+    
+    // رسم المخطط الشهري إذا كان موجوداً
+    if (salesSummary?.monthlySales && Array.isArray(salesSummary.monthlySales)) {
+        initMonthlySalesChart(salesSummary.monthlySales);
+    } else {
+        hideChart('monthlySalesChart');
+    }
+}
+
+// دالة لإخفاء المخطط إذا لم توجد بيانات
+function hideChart(chartId) {
+    const canvas = document.getElementById(chartId);
+    if (canvas) {
+        const container = canvas.parentElement;
+        if (container) {
+            container.innerHTML = '<div style="text-align: center; padding: 50px; color: #999;">لا توجد بيانات كافية لعرض المخطط</div>';
+        }
+    }
+}
+
+// دالة لرسم المخطط اليومي
+function initDailySalesChart(data) {
+    const canvas = document.getElementById('dailySalesChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    // تدمير المخطط السابق إذا كان موجوداً
+    if (charts.dailySalesChart) {
+        charts.dailySalesChart.destroy();
+    }
+    
+    // التأكد من أن البيانات مصفوفة
+    let chartData = Array.isArray(data) ? data : [];
+    
+    // التأكد من أن طول المصفوفة 7 أيام
+    while (chartData.length < 7) {
+        chartData.push(0);
+    }
+    chartData = chartData.slice(0, 7);
+    
+    const days = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    
+    charts.dailySalesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: days,
+            datasets: [{
+                label: 'عدد المبيعات',
+                data: chartData,
+                backgroundColor: '#D4AF37',
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            return Number.isInteger(value) ? value : null;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+// دالة لرسم المخطط الشهري
+function initMonthlySalesChart(data) {
+    const canvas = document.getElementById('monthlySalesChart');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    
+    if (charts.monthlySalesChart) {
+        charts.monthlySalesChart.destroy();
+    }
+    
+    const months = ['يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو', 
+                    'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+    
+    let chartData = Array.isArray(data) ? data : [];
+    
+    while (chartData.length < 12) {
+        chartData.push(0);
+    }
+    chartData = chartData.slice(0, 12);
+    
+    charts.monthlySalesChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'المبيعات',
+                data: chartData,
+                borderColor: '#D4AF37',
+                backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+}
+
+// دالة لعرض المشتريات الحديثة
+function displayRecentPurchases(purchases) {
+    const container = document.getElementById('recentPurchases');
+    
+    console.log("✅ Recent purchases:", purchases);
+    
+    if (!purchases || purchases.length === 0) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 30px; color: #666;">
+                <i class="fas fa-shopping-cart" style="font-size: 40px; margin-bottom: 10px;"></i>
+                <p>لا توجد مشتريات حديثة</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '<table><thead><tr><th>المستخدم</th><th>الكورس</th><th>السعر</th><th>تاريخ الشراء</th></tr></thead><tbody>';
+    
+    purchases.slice(0, 10).forEach(purchase => {
+        const userName = purchase.userName || purchase.user?.name || purchase.customerName || 'غير معروف';
+        const userEmail = purchase.userEmail || purchase.user?.email || purchase.customerEmail || '';
+        const courseTitle = purchase.courseTitle || purchase.course?.title || purchase.title || 'كورس';
+        const price = purchase.price || purchase.amount || purchase.total || 0;
+        const date = purchase.purchaseDate || purchase.date || purchase.createdAt;
+        
+        html += `
+            <tr>
+                <td>${userName} ${userEmail ? `<small>(${userEmail})</small>` : ''}</td>
+                <td>${courseTitle}</td>
+                <td>${price} ريال</td>
+                <td>${formatDate(date)}</td>
+            </tr>
+        `;
+    });
+    
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+// دالة لعرض رسالة خطأ المبيعات
+function showSalesErrorMessage() {
+    const elements = [
+        'totalSalesAmount',
+        'totalPurchasesCount', 
+        'averagePrice',
+        'topSelling'
+    ];
+    
+    elements.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = 'خطأ في التحميل';
+            el.style.color = '#f44336';
+        }
+    });
+    
+    // إخفاء المخططات
+    hideChart('dailySalesChart');
+    hideChart('monthlySalesChart');
+    
+    // عرض رسالة خطأ في المشتريات
+    const container = document.getElementById('recentPurchases');
+    if (container) {
+        container.innerHTML = `
+            <div style="text-align: center; padding: 30px; color: #f44336;">
+                <i class="fas fa-exclamation-circle" style="font-size: 40px; margin-bottom: 10px;"></i>
+                <p>فشل تحميل المشتريات</p>
+            </div>
+        `;
+    }
+}
+
+// دالة مساعدة لتنسيق التاريخ
+function formatDate(dateString) {
+    if (!dateString) return '-';
+    
+    try {
+        const date = new Date(dateString);
+        
+        // التحقق من صحة التاريخ
+        if (isNaN(date.getTime())) return '-';
+        
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        
+        if (diffMins < 1) return 'الآن';
+        if (diffMins < 60) return `منذ ${diffMins} دقيقة`;
+        if (diffHours < 24) return `منذ ${diffHours} ساعة`;
+        if (diffDays < 7) return `منذ ${diffDays} يوم`;
+        
+        return date.toLocaleDateString('ar-SA');
+    } catch (e) {
+        return '-';
+    }
+}
+
+        function initUniversitySalesChart(data) {
+            const ctx = document.getElementById('universitySalesChart')?.getContext('2d');
+            if (!ctx) return;
+            
+            if (charts.universitySalesChart) {
+                charts.universitySalesChart.destroy();
+            }
+            
+            charts.universitySalesChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: data?.labels || ['جامعة الملك خالد', 'جامعة الملك فيصل', 'جامعة طيبة'],
+                    datasets: [{
+                        data: data?.values || [30, 25, 20],
+                        backgroundColor: ['#D4AF37', '#4CAF50', '#2196F3'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // ========== DISCOUNTS MANAGEMENT ==========
+        function getDiscountsHTML() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>
+                            <i class="fas fa-tags"></i>
+                            الخصومات النشطة
+                        </h3>
+                        <div class="table-actions">
+                            <button class="btn btn-primary" onclick="openDiscountModal()">
+                                <i class="fas fa-plus-circle"></i>
+                                إضافة خصم
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="activeDiscounts">
+                        <div style="text-align: center; padding: 50px;">
+                            <div class="loading-spinner"></div>
+                            <p style="margin-top: 15px;">جاري تحميل الخصومات...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>
+                            <i class="fas fa-history"></i>
+                            الخصومات المنتهية
+                        </h3>
+                    </div>
+                    
+                    <div id="expiredDiscounts">
+                        <div style="text-align: center; padding: 50px;">
+                            <div class="loading-spinner"></div>
+                            <p style="margin-top: 15px;">جاري تحميل الخصومات...</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadDiscounts() {
+            // This is a placeholder - you'll need to implement discount endpoints
+            const activeContainer = document.getElementById('activeDiscounts');
+            const expiredContainer = document.getElementById('expiredDiscounts');
+            
+            activeContainer.innerHTML = `
+                <div style="text-align: center; padding: 30px; color: #666;">
+                    <i class="fas fa-tags" style="font-size: 40px; margin-bottom: 10px;"></i>
+                    <p>لا توجد خصومات نشطة</p>
+                </div>
+            `;
+            
+            expiredContainer.innerHTML = '';
+        }
+
+        async function loadCoursesForDiscount() {
+            try {
+                const courses = await apiRequest('/api/course');
+                const select = document.getElementById('discountCourse');
+                
+                select.innerHTML = '<option value="">اختر الكورس</option>';
+                
+                courses.forEach(course => {
+                    select.innerHTML += `<option value="${course.id}" data-price="${course.price}">${course.title} - ${course.price} ريال</option>`;
+                });
+                
+            } catch (error) {
+                console.error('Error loading courses for discount:', error);
+            }
+        }
+
+        // ========== ACTIVITIES MANAGEMENT ==========
+        function getActivitiesHTML() {
+            return `
+                <div class="table-card">
+                    <div class="table-header">
+                        <h3>
+                            <i class="fas fa-history"></i>
+                            سجل النشاطات
+                        </h3>
+                        <div class="table-actions">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="searchActivities" placeholder="بحث في النشاطات...">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="activitiesList">
+                        <div style="text-align: center; padding: 50px;">
+                            <div class="loading-spinner"></div>
+                            <p style="margin-top: 15px;">جاري تحميل النشاطات...</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function loadActivities() {
+            try {
+                const activities = await apiRequest('/api/admin/activities');
+                
+                const container = document.getElementById('activitiesList');
+                
+                if (!activities || activities.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 50px; color: #666;">
+                            <i class="fas fa-history" style="font-size: 50px; margin-bottom: 15px;"></i>
+                            <p>لا توجد نشاطات</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let html = '<table><thead><tr><th>المستخدم</th><th>النشاط</th><th>التفاصيل</th><th>التاريخ</th></tr></thead><tbody>';
+                
+                activities.forEach(activity => {
+                    html += `
+                        <tr>
+                            <td>${activity.userName || activity.userEmail || 'غير معروف'}</td>
+                            <td>${activity.action}</td>
+                            <td>${activity.details || '-'}</td>
+                            <td>${formatDate(activity.timestamp)}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += '</tbody></table>';
+                container.innerHTML = html;
+                
+                // Add search functionality
+                document.getElementById('searchActivities').addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('#activitiesList tbody tr');
+                    
+                    rows.forEach(row => {
+                        const text = row.textContent.toLowerCase();
+                        row.style.display = text.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+                
+            } catch (error) {
+                console.error('Error loading activities:', error);
+                showNotification('فشل تحميل النشاطات', 'error');
+            }
+        }
+
+        
+        // ========== COURSE MODALS ==========
+        function openAddCourseModal() {
+            document.getElementById('addCourseModal').classList.add('show');
+        }
+
+        function closeAddCourseModal() {
+            document.getElementById('addCourseModal').classList.remove('show');
+            document.getElementById('addCourseForm').reset();
+        }
+
+        async function editCourse(courseId) {
+            try {
+                const course = await apiRequest(`/api/course/${courseId}`);
+                
+                document.getElementById('editCourseId').value = course.id;
+                document.getElementById('editCourseTitle').value = course.title;
+                document.getElementById('editCourseDescription').value = course.description;
+                document.getElementById('editCourseUniversity').value = course.university;
+                document.getElementById('editCoursePrice').value = course.price;
+                
+                document.getElementById('editCourseModal').classList.add('show');
+                
+            } catch (error) {
+                console.error('Error loading course details:', error);
+                showNotification('فشل تحميل بيانات الكورس', 'error');
+            }
+        }
+
+        function closeEditCourseModal() {
+            document.getElementById('editCourseModal').classList.remove('show');
+            document.getElementById('editCourseForm').reset();
+        }
+
+        // ========== ADD COURSE FORM HANDLER ==========
+        document.getElementById('addCourseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            formData.append('Title', document.getElementById('courseTitle').value);
+            formData.append('Description', document.getElementById('courseDescription').value);
+            formData.append('University', document.getElementById('courseUniversity').value);
+            formData.append('Price', document.getElementById('coursePrice').value);
+            
+            const imageFile = document.getElementById('courseImage').files[0];
+            if (imageFile) {
+                formData.append('ImageFile', imageFile);
+            }
+            
+            try {
+                await apiRequest('/api/course', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {} // Let browser set content-type for FormData
+                });
+                
+                showNotification('تم إضافة الكورس بنجاح', 'success');
+                closeAddCourseModal();
+                loadCourses(); // Refresh courses list
+                
+            } catch (error) {
+                console.error('Error adding course:', error);
+                showNotification('فشل إضافة الكورس', 'error');
+            }
+        });
+
+        // ========== EDIT COURSE FORM HANDLER ==========
+        document.getElementById('editCourseForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const courseId = document.getElementById('editCourseId').value;
+            
+            const data = {
+                Title: document.getElementById('editCourseTitle').value,
+                Description: document.getElementById('editCourseDescription').value,
+                University: document.getElementById('editCourseUniversity').value,
+                Price: parseInt(document.getElementById('editCoursePrice').value)
+            };
+            
+            try {
+                await apiRequest(`/api/course/${courseId}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(data)
+                });
+                
+                showNotification('تم تحديث الكورس بنجاح', 'success');
+                closeEditCourseModal();
+                loadCourses(); // Refresh courses list
+                
+            } catch (error) {
+                console.error('Error updating course:', error);
+                showNotification('فشل تحديث الكورس', 'error');
+            }
+        });
+
+        // ========== DISCOUNT MODAL ==========
+        function openDiscountModal() {
+            document.getElementById('discountModal').classList.add('show');
+            loadCoursesForDiscount();
+        }
+
+        function closeDiscountModal() {
+            document.getElementById('discountModal').classList.remove('show');
+            document.getElementById('discountForm').reset();
+        }
+
+        // ========== DISCOUNT PREVIEW ==========
+        document.getElementById('discountPercentage').addEventListener('input', updateDiscountPreview);
+        document.getElementById('discountCourse').addEventListener('change', updateDiscountPreview);
+
+        function updateDiscountPreview() {
+            const select = document.getElementById('discountCourse');
+            const percentage = parseInt(document.getElementById('discountPercentage').value) || 0;
+            
+            if (select.selectedIndex > 0) {
+                const option = select.options[select.selectedIndex];
+                const price = parseInt(option.getAttribute('data-price')) || 0;
+                const discounted = price - (price * percentage / 100);
+                
+                document.getElementById('originalPrice').textContent = price + ' ريال';
+                document.getElementById('discountedPrice').textContent = discounted + ' ريال';
+            }
+        }
+
+        // ========== DISCOUNT FORM HANDLER ==========
+        document.getElementById('discountForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const courseId = document.getElementById('discountCourse').value;
+            const percentage = document.getElementById('discountPercentage').value;
+            const startDate = document.getElementById('discountStartDate').value;
+            const endDate = document.getElementById('discountEndDate').value;
+            
+            // This is a placeholder - implement discount endpoint
+            showNotification('تم إضافة الخصم بنجاح', 'success');
+            closeDiscountModal();
+        });
+
+        // ========== USER FUNCTIONS ==========
+        window.viewUserCourses = async function(userId) {
+            try {
+                const courses = await apiRequest(`/api/users/course?userId=${userId}`);
+                showNotification(`عرض كورسات المستخدم: ${courses?.length || 0} كورس`, 'info');
+            } catch (error) {
+                console.error('Error loading user courses:', error);
+                showNotification('فشل تحميل كورسات المستخدم', 'error');
+            }
+        };
+
+        window.viewUserPurchases = async function(userId) {
+            try {
+                const purchases = await apiRequest(`/api/users/purchases?userId=${userId}`);
+                showNotification(`مشتريات المستخدم: ${purchases?.length || 0} عملية`, 'info');
+            } catch (error) {
+                console.error('Error loading user purchases:', error);
+                showNotification('فشل تحميل مشتريات المستخدم', 'error');
+            }
+        };
+
+        window.deleteUser = async function(userId) {
+            if (!confirm('هل أنت متأكد من حذف هذا المستخدم؟')) return;
+            
+            try {
+                await apiRequest(`/api/users/${userId}`, { method: 'DELETE' });
+                showNotification('تم حذف المستخدم بنجاح', 'success');
+                loadUsers(); // Refresh users list
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                showNotification('فشل حذف المستخدم', 'error');
+            }
+        };
+
+        window.deleteCourse = async function(courseId) {
+            if (!confirm('هل أنت متأكد من حذف هذا الكورس؟')) return;
+            
+            try {
+                await apiRequest(`/api/course/${courseId}`, { method: 'DELETE' });
+                showNotification('تم حذف الكورس بنجاح', 'success');
+                loadCourses(); // Refresh courses list
+            } catch (error) {
+                console.error('Error deleting course:', error);
+                showNotification('فشل حذف الكورس', 'error');
+            }
+        };
+
+        window.applyDiscount = function(courseId) {
+            openDiscountModal();
+            // Pre-select the course
+            setTimeout(() => {
+                const select = document.getElementById('discountCourse');
+                for (let i = 0; i < select.options.length; i++) {
+                    if (select.options[i].value === courseId) {
+                        select.selectedIndex = i;
+                        updateDiscountPreview();
+                        break;
+                    }
+                }
+            }, 500);
+        };
+
+        // ========== HELPER FUNCTIONS ==========
+        function buildImageUrl(imagePath) {
+            if (!imagePath) {
+                return 'https://img.freepik.com/free-vector/online-tutorials-concept_52683-37481.jpg?w=740';
+            }
+            
+            if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+                return imagePath;
+            }
+            
+            if (imagePath.startsWith('/')) {
+                return `${API_BASE_URL}${imagePath}`;
+            }
+            
+            return `${API_BASE_URL}/uploads/courses/${imagePath}`;
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '-';
+            
+            const date = new Date(dateString);
+            
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'الآن';
+            if (diffMins < 60) return `منذ ${diffMins} دقيقة`;
+            if (diffHours < 24) return `منذ ${diffHours} ساعة`;
+            if (diffDays < 7) return `منذ ${diffDays} يوم`;
+            
+            return date.toLocaleDateString('ar-SA');
+        }
+
+        // ========== API REQUEST FUNCTION ==========
+       async function apiRequest(endpoint, options = {}) {
+    const url = `${API_BASE_URL}${endpoint}`;
+    
+    const headers = {
+        ...options.headers
+    };
+    console.log("📤 Request headers:", headers);
+    
+    // Don't set Content-Type for FormData
+    if (!(options.body instanceof FormData)) {
+        headers['Content-Type'] = 'application/json';
+    }
+    
+    if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+        console.log("🔑 Auth token:", headers['Authorization']?.substring(0, 20) + '...');
+    }
+    
+    try {
+        const response = await fetch(url, {
+            ...options,
+            headers
+        });
+        
+        console.log("📡 Response status:", response.status, response.statusText);
+        
+        // التحقق من نوع المحتوى قبل القراءة
+        const contentType = response.headers.get('content-type');
+        const isJson = contentType && contentType.includes('application/json');
+        
+        // قراءة الـ Response مرة واحدة فقط
+        let responseData;
+        
+        try {
+            if (isJson) {
+                responseData = await response.json();
+                console.log("✅ Response data (JSON):", responseData);
+            } else {
+                responseData = await response.text();
+                console.log("✅ Response data (Text):", responseData?.substring(0, 200) + (responseData?.length > 200 ? '...' : ''));
+            }
+        } catch (parseError) {
+            console.error("❌ Error parsing response:", parseError);
+            responseData = null;
+        }
+        
+        // التحقق من حالة الاستجابة
+        if (!response.ok) {
+            let errorMessage = `خطأ ${response.status}`;
+            
+            if (responseData) {
+                if (typeof responseData === 'object') {
+                    errorMessage = responseData.message || responseData.title || responseData.error || JSON.stringify(responseData);
+                } else if (typeof responseData === 'string') {
+                    errorMessage = responseData;
+                }
+            }
+            
+            console.error("❌ API Error:", errorMessage);
+            
+            if (response.status === 401) {
+                showNotification('انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى', 'error');
+                // setTimeout(() => {
+                //     window.location.href = 'index.html';
+                // }, 2000);
+            }
+            
+            throw new Error(errorMessage);
+        }
+        
+        // Handle 204 No Content
+        if (response.status === 204 || !responseData) {
+            return null;
+        }
+        
+        return responseData;
+        
+    } catch (error) {
+        console.error('🚨 API Error:', error);
+        showNotification('خطأ في الاتصال: ' + error.message, 'error');
+        throw error;
+    }
+}
+
+        // ========== NOTIFICATION FUNCTION ==========
+        function showNotification(message, type = 'info') {
+            // Remove existing notification
+            const oldNotification = document.querySelector('.admin-notification');
+            if (oldNotification) oldNotification.remove();
+            
+            const notification = document.createElement('div');
+            notification.className = `admin-notification ${type}`;
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 
+                        type === 'error' ? 'fa-exclamation-circle' : 
+                        type === 'warning' ? 'fa-exclamation-triangle' : 
+                        'fa-info-circle';
+            
+            notification.innerHTML = `
+                <i class="fas ${icon}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // Add animation style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideOutRight {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+     // ========== LESSONS MANAGEMENT ==========
+
+// دالة لجلب جميع الكورسات
+async function loadCoursesForLessons() {
+    try {
+        console.log('📥 Loading courses for lessons...');
+        const courses = await apiRequest('/api/Course');
+        console.log('✅ Courses loaded:', courses);
+        return Array.isArray(courses) ? courses : [];
+    } catch (error) {
+        console.error('❌ Error loading courses for lessons:', error);
+        return [];
+    }
+}
+
+// HTML لقسم الدروس
+function getLessonsHTML() {
+    return `
+        <div class="table-card">
+            <div class="table-header">
+                <h3>
+                    <i class="fas fa-video"></i>
+                    إدارة الدروس
+                </h3>
+                <div class="table-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchLessons" placeholder="بحث في الدروس...">
+                    </div>
+                    <button class="btn btn-primary" onclick="openAddLessonModal()">
+                        <i class="fas fa-plus-circle"></i>
+                        إضافة درس جديد
+                    </button>
+                </div>
+            </div>
+            
+            <!-- فلتر الكورسات -->
+            <div style="margin-bottom: 20px; display: flex; gap: 15px; align-items: center;">
+                <label style="font-weight: bold; color: #333;">تصفية حسب الكورس:</label>
+                <select id="courseFilter" class="form-control" style="width: 300px;" onchange="filterLessonsByCourse()">
+                    <option value="all">جميع الكورسات</option>
+                </select>
+            </div>
+            
+            <!-- قائمة الدروس -->
+            <div id="lessonsList">
+                <div style="text-align: center; padding: 50px;">
+                    <div class="loading-spinner"></div>
+                    <p style="margin-top: 15px;">جاري تحميل الدروس...</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// تحميل جميع الدروس
+async function loadLessons() {
+    try {
+        console.log('📥 Loading lessons...');
+        const response = await fetch(`${API_BASE_URL}/api/lessons`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('❌ Failed to load lessons:', response.status, errorText);
+            throw new Error(`فشل تحميل الدروس (${response.status})`);
+        }
+        
+        const lessons = await response.json();
+        console.log('✅ Lessons loaded:', lessons);
+        
+        const container = document.getElementById('lessonsList');
+        if (!container) return;
+        
+        // تحميل الكورسات للعرض
+        const courses = await loadCoursesForLessons();
+        const coursesMap = {};
+        courses.forEach(c => coursesMap[c.id] = c);
+        
+        if (!lessons || lessons.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 50px; color: #666;">
+                    <i class="fas fa-video" style="font-size: 50px; margin-bottom: 15px;"></i>
+                    <p>لا توجد دروس</p>
+                    <button class="btn btn-primary" onclick="openAddLessonModal()" style="margin-top: 15px;">
+                        <i class="fas fa-plus-circle"></i>
+                        إضافة أول درس
+                    </button>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '<table><thead><tr><th>#</th><th>عنوان الدرس</th><th>الكورس</th><th>الترتيب</th><th>المدة</th><th>تاريخ الإضافة</th><th>الفيديو</th><th>الإجراءات</th></tr></thead><tbody>';
+        
+        lessons.forEach((lesson, index) => {
+            const course = coursesMap[lesson.courseId] || { title: 'غير معروف' };
+            const hasVideo = lesson.bunnyVideoId || lesson.videoUrl;
+            
+            html += `
+                <tr data-course-id="${lesson.courseId}">
+                    <td>${index + 1}</td>
+                    <td>${lesson.title || 'بدون عنوان'}</td>
+                    <td>${course.title}</td>
+                    <td>${lesson.order || 0}</td>
+                    <td>${lesson.duration || '00:00'}</td>
+                    <td>${formatDate(lesson.createdAt)}</td>
+                    <td>
+                        ${hasVideo ? 
+                            `<span class="status-badge status-active"><i class="fas fa-check"></i> موجود</span>` : 
+                            `<span class="status-badge status-inactive"><i class="fas fa-times"></i> لا يوجد</span>`
+                        }
+                    </td>
+                    <td class="action-buttons">
+                        <button class="btn btn-sm btn-primary" onclick="editLesson('${lesson.id}')" title="تعديل">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="uploadVideo('${lesson.id}')" title="رفع فيديو">
+                            <i class="fas fa-upload"></i>
+                        </button>
+                        <button class="btn btn-sm btn-info" onclick="previewLesson('${lesson.id}')" title="معاينة">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteLesson('${lesson.id}')" title="حذف">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+        
+        html += '</tbody></table>';
+        container.innerHTML = html;
+        
+        // تعبئة قائمة الفلتر بالكورسات
+        const filterSelect = document.getElementById('courseFilter');
+        if (filterSelect && courses.length > 0) {
+            filterSelect.innerHTML = '<option value="all">جميع الكورسات</option>';
+            courses.forEach(course => {
+                filterSelect.innerHTML += `<option value="${course.id}">${course.title}</option>`;
+            });
+        }
+        
+        // إضافة خاصية البحث
+        const searchInput = document.getElementById('searchLessons');
+        if (searchInput) {
+            // إزالة المستمع القديم إذا وجد
+            const newSearchInput = searchInput.cloneNode(true);
+            searchInput.parentNode.replaceChild(newSearchInput, searchInput);
+            
+            newSearchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#lessonsList tbody tr');
+                
+                rows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    row.style.display = text.includes(searchTerm) ? '' : 'none';
+                });
+            });
+        }
+        
+    } catch (error) {
+        console.error('❌ Error loading lessons:', error);
+        const container = document.getElementById('lessonsList');
+        if (container) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 50px; color: #f44336;">
+                    <i class="fas fa-exclamation-circle" style="font-size: 50px; margin-bottom: 15px;"></i>
+                    <p>فشل تحميل الدروس</p>
+                    <p style="font-size: 14px; color: #999;">${error.message}</p>
+                    <button class="btn btn-primary" onclick="loadLessons()" style="margin-top: 15px;">
+                        <i class="fas fa-sync"></i> إعادة المحاولة
+                    </button>
+                </div>
+            `;
+        }
+        showNotification('❌ فشل تحميل الدروس: ' + error.message, 'error');
+    }
+}
+
+// تصفية الدروس حسب الكورس
+function filterLessonsByCourse() {
+    const filterValue = document.getElementById('courseFilter').value;
+    const rows = document.querySelectorAll('#lessonsList tbody tr');
+    
+    rows.forEach(row => {
+        const courseId = row.getAttribute('data-course-id');
+        if (filterValue === 'all' || courseId === filterValue) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+// البحث عن درس بواسطة ID
+async function searchLessonById() {
+    const lessonId = document.getElementById('lessonIdSearch').value.trim();
+    
+    if (!lessonId) {
+        showNotification('الرجاء إدخال ID الدرس', 'warning');
+        return;
+    }
+    
+    try {
+        showNotification('جاري البحث عن الدرس...', 'info');
+        const lesson = await apiRequest(`/api/lessons/${lessonId}`);
+        
+        if (lesson) {
+            displayLessonDetails(lesson);
+        }
+    } catch (error) {
+        console.error('Error searching lesson:', error);
+        showNotification('الدرس غير موجود', 'error');
+    }
+}
+
+// عرض تفاصيل الدرس
+function displayLessonDetails(lesson) {
+    const container = document.getElementById('lessonsList');
+    if (!container) return;
+    
+    container.innerHTML = `
+        <h4 style="margin-bottom: 15px; color: #333;">نتيجة البحث:</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>عنوان الدرس</th>
+                    <th>الوصف</th>
+                    <th>الترتيب</th>
+                    <th>المدة</th>
+                    <th>الفيديو</th>
+                    <th>الإجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>${lesson.id}</td>
+                    <td>${lesson.title || 'بدون عنوان'}</td>
+                    <td>${lesson.description || '-'}</td>
+                    <td>${lesson.order || 0}</td>
+                    <td>${lesson.duration || '00:00'}</td>
+                    <td>
+                        ${lesson.videoUrl ? 
+                            `<button class="btn btn-sm btn-info" onclick="window.open('${lesson.videoUrl}', '_blank')">
+                                <i class="fas fa-play"></i> مشاهدة
+                            </button>` : 
+                            'لا يوجد فيديو'}
+                    </td>
+                    <td class="action-buttons">
+                        <button class="btn btn-sm btn-primary" onclick="editLesson('${lesson.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="uploadVideo('${lesson.id}')">
+                            <i class="fas fa-upload"></i>
+                        </button>
+                        <button class="btn btn-sm btn-info" onclick="previewLesson('${lesson.id}')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteLesson('${lesson.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top: 20px; text-align: center;">
+            <button class="btn btn-secondary" onclick="loadLessons()">
+                <i class="fas fa-arrow-right"></i> العودة للقائمة
+            </button>
+        </div>
+    `;
+}
+
+// الحصول على HTML مودال إضافة درس
+function getAddLessonModalHTML() {
+    // إزالة المودال القديم إذا وجد
+    const oldModal = document.getElementById('addLessonModal');
+    if (oldModal) oldModal.remove();
+    
+    const modalHTML = `
+        <div id="addLessonModal" class="modal">
+            <div class="modal-content" style="max-width: 500px;">
+                <div class="modal-header">
+                    <h2>
+                        <i class="fas fa-plus-circle"></i>
+                        إضافة درس جديد
+                    </h2>
+                    <button class="close-modal" onclick="closeAddLessonModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <div id="addLessonError" style="display: none; background: #ffebee; color: #f44336; padding: 10px; border-radius: 5px; margin-bottom: 15px;"></div>
+                    
+                    <form id="addLessonForm">
+                        <div class="form-group">
+                            <label>اختر الكورس <span style="color: #f44336;">*</span></label>
+                            <select id="lessonCourseId" class="form-control" required>
+                                <option value="">-- اختر الكورس --</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>عنوان الدرس <span style="color: #f44336;">*</span></label>
+                            <input type="text" id="lessonTitle" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>وصف الدرس</label>
+                            <textarea id="lessonDescription" class="form-control" rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>الترتيب</label>
+                            <input type="number" id="lessonOrder" class="form-control" min="1" value="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>مدة الفيديو</label>
+                            <input type="text" id="lessonDuration" class="form-control" placeholder="مثال: 15:30">
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> إضافة الدرس
+                            </button>
+                            <button type="button" class="btn btn-danger" onclick="closeAddLessonModal()">
+                                <i class="fas fa-times"></i> إلغاء
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+}
+
+// فتح مودال إضافة درس
+async function openAddLessonModal() {
+    getAddLessonModalHTML();
+    
+    const modal = document.getElementById('addLessonModal');
+    if (!modal) return;
+    
+    // تحميل الكورسات
+    try {
+        const courses = await loadCoursesForLessons();
+        const select = document.getElementById('lessonCourseId');
+        
+        select.innerHTML = '<option value="">-- اختر الكورس --</option>';
+        if (courses && courses.length > 0) {
+            courses.forEach(course => {
+                select.innerHTML += `<option value="${course.id}">${course.title}</option>`;
+            });
+        } else {
+            select.innerHTML += '<option value="" disabled>لا توجد كورسات متاحة</option>';
+        }
+        
+        modal.classList.add('show');
+        
+        // إضافة معالج إرسال النموذج
+        const form = document.getElementById('addLessonForm');
+        // إزالة المستمع القديم إذا وجد
+        const newForm = form.cloneNode(true);
+        form.parentNode.replaceChild(newForm, form);
+        newForm.addEventListener('submit', handleAddLessonSubmit);
+        
+    } catch (error) {
+        console.error('Error loading courses:', error);
+        showNotification('فشل تحميل الكورسات', 'error');
+    }
+}
+
+// إغلاق مودال إضافة درس
+function closeAddLessonModal() {
+    const modal = document.getElementById('addLessonModal');
+    if (modal) {
+        modal.classList.remove('show');
+    }
+}
+
+// معالجة إضافة درس جديد
+async function handleAddLessonSubmit(e) {
+    e.preventDefault();
+    
+    const courseId = document.getElementById('lessonCourseId').value;
+    const title = document.getElementById('lessonTitle').value.trim();
+    const description = document.getElementById('lessonDescription').value.trim();
+    const order = parseInt(document.getElementById('lessonOrder').value) || 1;
+    const duration = document.getElementById('lessonDuration').value.trim();
+    
+    if (!courseId || !title) {
+        showNotification('الرجاء إدخال جميع الحقول المطلوبة', 'error');
+        return;
+    }
+    
+    // استخدام FormData بدلاً من JSON
+    const formData = new FormData();
+    formData.append('Title', title);
+    formData.append('Description', description || '');
+    formData.append('CourseId', parseInt(courseId));
+    formData.append('Order', order);
+    formData.append('Duration', duration || '00:00');
+    
+    console.log('📤 Sending FormData:');
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ':', pair[1]);
+    }
+    
+    try {
+        showNotification('جاري إضافة الدرس...', 'info');
+        
+        const response = await fetch(`${API_BASE_URL}/api/lessons`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+                // لا تضف Content-Type هنا - المتصفح سيضيفها تلقائياً
+            },
+            body: formData
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('❌ Error response:', errorText);
+            throw new Error(errorText || 'فشل إضافة الدرس');
+        }
+        
+        const result = await response.json();
+        console.log('✅ Success:', result);
+        
+        showNotification('✅ تم إضافة الدرس بنجاح', 'success');
+        closeAddLessonModal();
+        loadLessons();
+        
+    } catch (error) {
+        console.error('❌ Error:', error);
+        showNotification('❌ ' + error.message, 'error');
+    }
+}
+
+// فتح مودال تعديل درس
+async function editLesson(lessonId) {
+    try {
+        console.log('📥 Loading lesson for edit:', lessonId);
+        const lesson = await apiRequest(`/api/lessons/${lessonId}`);
+        console.log('✅ Lesson loaded:', lesson);
+        
+        // إنشاء مودال التعديل
+        const editModalHTML = `
+            <div id="editLessonModal" class="modal show">
+                <div class="modal-content" style="max-width: 500px;">
+                    <div class="modal-header">
+                        <h2>
+                            <i class="fas fa-edit"></i>
+                            تعديل الدرس
+                        </h2>
+                        <button class="close-modal" onclick="closeEditLessonModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div id="editLessonError" style="display: none; background: #ffebee; color: #f44336; padding: 10px; border-radius: 5px; margin-bottom: 15px;"></div>
+                    
+                    <form id="editLessonForm">
+                        <input type="hidden" id="editLessonId" value="${lesson.id}">
+                        
+                        <div class="form-group">
+                            <label>عنوان الدرس</label>
+                            <input type="text" id="editLessonTitle" class="form-control" value="${lesson.title || ''}" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>وصف الدرس</label>
+                            <textarea id="editLessonDescription" class="form-control" rows="3">${lesson.description || ''}</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>الترتيب</label>
+                            <input type="number" id="editLessonOrder" class="form-control" value="${lesson.order || 1}">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>مدة الفيديو</label>
+                            <input type="text" id="editLessonDuration" class="form-control" value="${lesson.duration || ''}">
+                        </div>
+                        
+                        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save"></i> حفظ التغييرات
+                            </button>
+                            <button type="button" class="btn btn-danger" onclick="closeEditLessonModal()">
+                                <i class="fas fa-times"></i> إلغاء
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        `;
+        
+        // إزالة المودال القديم إذا وجد
+        const oldModal = document.getElementById('editLessonModal');
+        if (oldModal) oldModal.remove();
+        
+        // إضافة المودال الجديد
+        document.body.insertAdjacentHTML('beforeend', editModalHTML);
+        
+        // إضافة معالج إرسال النموذج
+        const form = document.getElementById('editLessonForm');
+        form.addEventListener('submit', handleUpdateLessonSubmit);
+        
+    } catch (error) {
+        console.error('Error loading lesson:', error);
+        showNotification('فشل تحميل بيانات الدرس', 'error');
+    }
+}
+
+// معالجة تحديث الدرس
+async function handleUpdateLessonSubmit(e) {
+    e.preventDefault();
+    
+    const errorDiv = document.getElementById('editLessonError');
+    if (errorDiv) errorDiv.style.display = 'none';
+    
+    const lessonId = document.getElementById('editLessonId').value;
+    const title = document.getElementById('editLessonTitle').value.trim();
+    const description = document.getElementById('editLessonDescription').value.trim();
+    const order = parseInt(document.getElementById('editLessonOrder').value) || 1;
+    const duration = document.getElementById('editLessonDuration').value.trim();
+    
+    if (!title) {
+        showNotification('الرجاء إدخال عنوان الدرس', 'error');
+        return;
+    }
+    
+    const lessonData = {
+        title: title,
+        description: description || null,
+        order: order,
+        duration: duration || null
+    };
+    
+    console.log('📤 Updating lesson:', lessonId, lessonData);
+    
+    try {
+        showNotification('جاري تحديث الدرس...', 'info');
+        
+        const response = await fetch(`${API_BASE_URL}/api/lessons/${lessonId}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(lessonData)
+        });
+        
+        const responseText = await response.text();
+        console.log('📥 Response status:', response.status);
+        console.log('📥 Response body:', responseText);
+        
+        if (!response.ok) {
+            let errorMessage = 'فشل تحديث الدرس';
+            
+            try {
+                if (responseText) {
+                    const errorJson = JSON.parse(responseText);
+                    if (errorJson.errors) {
+                        const errors = [];
+                        for (const field in errorJson.errors) {
+                            errors.push(`${field}: ${errorJson.errors[field].join(', ')}`);
+                        }
+                        errorMessage = errors.join(' | ');
+                    } else if (errorJson.title) {
+                        errorMessage = errorJson.title;
+                    } else if (errorJson.message) {
+                        errorMessage = errorJson.message;
+                    }
+                }
+            } catch (parseError) {
+                errorMessage = responseText || `خطأ ${response.status}`;
+            }
+            
+            throw new Error(errorMessage);
+        }
+        
+        showNotification('✅ تم تحديث الدرس بنجاح', 'success');
+        closeEditLessonModal();
+        
+        setTimeout(() => {
+            loadLessons();
+        }, 500);
+        
+    } catch (error) {
+        console.error('❌ Error updating lesson:', error);
+        
+        if (errorDiv) {
+            errorDiv.textContent = error.message;
+            errorDiv.style.display = 'block';
+        }
+        
+        showNotification('❌ ' + error.message, 'error');
+    }
+}
+
+// إغلاق مودال التعديل
+function closeEditLessonModal() {
+    const modal = document.getElementById('editLessonModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// رفع فيديو لدرس
+async function uploadVideo(lessonId) {
+    // إنشاء مودال رفع الفيديو
+    const uploadModalHTML = `
+        <div id="uploadVideoModal" class="modal show">
+            <div class="modal-content" style="max-width: 500px;">
+                <div class="modal-header">
+                    <h2>
+                        <i class="fas fa-upload"></i>
+                        رفع فيديو للدرس
+                    </h2>
+                    <button class="close-modal" onclick="closeUploadModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <div id="uploadError" style="display: none; background: #ffebee; color: #f44336; padding: 10px; border-radius: 5px; margin-bottom: 15px;"></div>
+                    
+                    <div class="form-group">
+                        <label>اختر ملف الفيديو</label>
+                        
+                        <!-- منطقة الرفع -->
+                        <div class="upload-area" onclick="document.getElementById('lessonVideoUpload').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <h4>انقر لاختيار ملف</h4>
+                            <p>MP4, WebM, Ogg (الحد الأقصى 500MB)</p>
+                        </div>
+                        
+                        <input type="file" id="lessonVideoUpload" accept="video/*" style="display: none;" 
+                               onchange="handleVideoUploadSelect(event, '${lessonId}')">
+                        
+                        <!-- معلومات الملف المحدد -->
+                        <div id="uploadFileInfo" style="display: none;" class="file-info">
+                            <i class="fas fa-video"></i>
+                            <div class="file-details">
+                                <div class="file-name" id="uploadFileName"></div>
+                                <div class="file-size" id="uploadFileSize"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- شريط التقدم -->
+                        <div id="uploadProgress" style="display: none;">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="uploadProgressFill">0%</div>
+                            </div>
+                        </div>
+                        
+                        <!-- زر الرفع -->
+                        <button id="startUploadBtn" class="btn btn-success" style="width: 100%; margin-top: 20px; display: none;" 
+                                onclick="startVideoUpload('${lessonId}')">
+                            <i class="fas fa-upload"></i> بدء الرفع
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // إزالة المودال القديم إذا وجد
+    const oldModal = document.getElementById('uploadVideoModal');
+    if (oldModal) oldModal.remove();
+    
+    // إضافة المودال الجديد
+    document.body.insertAdjacentHTML('beforeend', uploadModalHTML);
+}
+
+// معالجة اختيار ملف للرفع
+function handleVideoUploadSelect(event, lessonId) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // التحقق من نوع الملف
+    const validTypes = ['video/mp4', 'video/webm', 'video/ogg', 'video/quicktime'];
+    if (!validTypes.includes(file.type)) {
+        showNotification('نوع الملف غير مدعوم. الرجاء رفع ملف فيديو MP4, WebM أو Ogg', 'error');
+        document.getElementById('lessonVideoUpload').value = '';
+        return;
+    }
+    
+    // التحقق من حجم الملف (500MB كحد أقصى)
+    const maxSize = 500 * 1024 * 1024; // 500MB in bytes
+    if (file.size > maxSize) {
+        showNotification('حجم الملف كبير جداً. الحد الأقصى 500MB', 'error');
+        document.getElementById('lessonVideoUpload').value = '';
+        return;
+    }
+    
+    // عرض معلومات الملف
+    document.getElementById('uploadFileName').textContent = file.name;
+    document.getElementById('uploadFileSize').textContent = formatFileSize(file.size);
+    document.getElementById('uploadFileInfo').style.display = 'flex';
+    
+    // إظهار زر بدء الرفع
+    document.getElementById('startUploadBtn').style.display = 'block';
+    
+    // حفظ الملف للاستخدام لاحقاً
+    window.selectedVideoFile = file;
+}
+
+// بدء رفع الفيديو
+async function startVideoUpload(lessonId) {
+    const file = window.selectedVideoFile;
+    const errorDiv = document.getElementById('uploadError');
+    
+    if (!file) {
+        showNotification('الرجاء اختيار ملف أولاً', 'warning');
+        return;
+    }
+    
+    // إظهار شريط التقدم
+    document.getElementById('uploadProgress').style.display = 'block';
+    document.getElementById('startUploadBtn').disabled = true;
+    if (errorDiv) errorDiv.style.display = 'none';
+    
+    try {
+        // إنشاء FormData لرفع الملف فقط
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        console.log('📤 Uploading video for lesson:', lessonId);
+        console.log('📁 File:', file.name, file.size, file.type);
+        
+        updateUploadProgress(10);
+        
+        const response = await fetch(`${API_BASE_URL}/api/admin/${lessonId}/upload-video`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: formData
+        });
+        
+        updateUploadProgress(80);
+        
+        const responseText = await response.text();
+        console.log('📥 Response status:', response.status);
+        console.log('📥 Response body:', responseText);
+        
+        if (!response.ok) {
+            let errorMessage = 'فشل رفع الفيديو';
+            try {
+                if (responseText) {
+                    const errorJson = JSON.parse(responseText);
+                    errorMessage = errorJson.message || errorJson.title || errorMessage;
+                }
+            } catch (e) {
+                errorMessage = responseText || errorMessage;
+            }
+            throw new Error(errorMessage);
+        }
+        
+        let result;
+        try {
+            result = responseText ? JSON.parse(responseText) : { message: 'تم الرفع بنجاح' };
+        } catch (e) {
+            result = { message: responseText || 'تم الرفع بنجاح' };
+        }
+        
+        console.log('✅ Upload success:', result);
+        
+        updateUploadProgress(100);
+        
+        showNotification('✅ تم رفع الفيديو بنجاح', 'success');
+        
+        setTimeout(() => {
+            closeUploadModal();
+            loadLessons();
+        }, 2000);
+        
+    } catch (error) {
+        console.error('❌ Error uploading video:', error);
+        
+        if (errorDiv) {
+            errorDiv.textContent = error.message;
+            errorDiv.style.display = 'block';
+        }
+        
+        showNotification('❌ فشل رفع الفيديو: ' + error.message, 'error');
+        document.getElementById('startUploadBtn').disabled = false;
+        document.getElementById('uploadProgress').style.display = 'none';
+    }
+}
+
+// تحديث شريط التقدم
+function updateUploadProgress(percent) {
+    const progressFill = document.getElementById('uploadProgressFill');
+    if (progressFill) {
+        progressFill.style.width = percent + '%';
+        progressFill.textContent = percent + '%';
+    }
+}
+
+// إغلاق مودال الرفع
+function closeUploadModal() {
+    const modal = document.getElementById('uploadVideoModal');
+    if (modal) {
+        modal.remove();
+    }
+    window.selectedVideoFile = null;
+}
+
+// معاينة الدرس
+async function previewLesson(lessonId) {
+    try {
+        const lesson = await apiRequest(`/api/lessons/${lessonId}`);
+        
+        const previewHTML = `
+            <div id="previewLessonModal" class="modal show">
+                <div class="modal-content" style="max-width: 800px;">
+                    <div class="modal-header">
+                        <h2>
+                            <i class="fas fa-eye"></i>
+                            معاينة الدرس: ${lesson.title || 'بدون عنوان'}
+                        </h2>
+                        <button class="close-modal" onclick="closePreviewModal()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        ${lesson.videoUrl ? `
+                            <div style="margin-bottom: 20px;">
+                                <video class="video-preview" controls>
+                                    <source src="${lesson.videoUrl}" type="video/mp4">
+                                    متصفحك لا يدعم تشغيل الفيديو
+                                </video>
+                            </div>
+                        ` : `
+                            <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 10px; margin-bottom: 20px;">
+                                <i class="fas fa-video-slash" style="font-size: 50px; color: #999;"></i>
+                                <p style="margin-top: 15px; color: #666;">لا يوجد فيديو لهذا الدرس</p>
+                                <button class="btn btn-primary" onclick="uploadVideo('${lesson.id}'); closePreviewModal();">
+                                    <i class="fas fa-upload"></i> رفع فيديو
+                                </button>
+                            </div>
+                        `}
+                        
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                            <h4 style="color: #333; margin-bottom: 10px;">تفاصيل الدرس</h4>
+                            <p><strong>ID:</strong> ${lesson.id}</p>
+                            <p><strong>العنوان:</strong> ${lesson.title}</p>
+                            <p><strong>الوصف:</strong> ${lesson.description || 'لا يوجد وصف'}</p>
+                            <p><strong>الترتيب:</strong> ${lesson.order || 0}</p>
+                            <p><strong>المدة:</strong> ${lesson.duration || 'غير محدد'}</p>
+                            ${lesson.videoUrl ? `
+                                <p><strong>رابط الفيديو:</strong> 
+                                    <a href="${lesson.videoUrl}" target="_blank" style="color: #D4AF37; word-break: break-all;">
+                                        ${lesson.videoUrl}
+                                    </a>
+                                </p>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const oldModal = document.getElementById('previewLessonModal');
+        if (oldModal) oldModal.remove();
+        
+        document.body.insertAdjacentHTML('beforeend', previewHTML);
+        
+    } catch (error) {
+        console.error('Error previewing lesson:', error);
+        showNotification('فشل تحميل الدرس للمعاينة', 'error');
+    }
+}
+
+// إغلاق مودال المعاينة
+function closePreviewModal() {
+    const modal = document.getElementById('previewLessonModal');
+    if (modal) {
+        modal.remove();
+    }
+}
+
+// حذف درس
+async function deleteLesson(lessonId) {
+    if (!confirm('هل أنت متأكد من حذف هذا الدرس؟ لا يمكن التراجع عن هذا الإجراء.')) {
+        return;
+    }
+    
+    try {
+        showNotification('جاري حذف الدرس...', 'info');
+        
+        const response = await fetch(`${API_BASE_URL}/api/lessons/${lessonId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            let errorMessage = 'فشل حذف الدرس';
+            try {
+                if (errorText) {
+                    const errorJson = JSON.parse(errorText);
+                    errorMessage = errorJson.message || errorJson.title || errorMessage;
+                }
+            } catch (e) {
+                errorMessage = errorText || errorMessage;
+            }
+            throw new Error(errorMessage);
+        }
+        
+        showNotification('✅ تم حذف الدرس بنجاح', 'success');
+        loadLessons();
+        
+    } catch (error) {
+        console.error('❌ Error deleting lesson:', error);
+        showNotification('❌ فشل حذف الدرس: ' + error.message, 'error');
+    }
+}
+
+// إعادة ترتيب الدروس
+async function reorderLessons(orders) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/lessons/reorder`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify(orders)
+        });
+        
+        if (!response.ok) {
+            throw new Error('فشل إعادة ترتيب الدروس');
+        }
+        
+        showNotification('✅ تم إعادة ترتيب الدروس بنجاح', 'success');
+        loadLessons();
+        
+    } catch (error) {
+        console.error('❌ Error reordering lessons:', error);
+        showNotification('❌ فشل إعادة ترتيب الدروس', 'error');
+    }
+}
+
+// تنسيق حجم الملف
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// ========== UPDATE SECTION LOADER ==========
+// تحديث دالة loadSection
+const originalLoadSection = window.loadSection || function() {};
+
+window.loadSection = function(section) {
+    const content = document.getElementById('dynamicContent');
+    
+    if (section === 'lessons') {
+        content.innerHTML = getLessonsHTML();
+        setTimeout(() => {
+            loadLessons();
+        }, 100);
+    } else {
+        originalLoadSection(section);
+    }
+};
+
+// ========== EXPOSE FUNCTIONS GLOBALLY ==========
+window.searchLessonById = searchLessonById;
+window.openAddLessonModal = openAddLessonModal;
+window.closeAddLessonModal = closeAddLessonModal;
+window.editLesson = editLesson;
+window.closeEditLessonModal = closeEditLessonModal;
+window.previewLesson = previewLesson;
+window.closePreviewModal = closePreviewModal;
+window.deleteLesson = deleteLesson;
+window.uploadVideo = uploadVideo;
+window.handleVideoUploadSelect = handleVideoUploadSelect;
+window.startVideoUpload = startVideoUpload;
+window.closeUploadModal = closeUploadModal;
+window.filterLessonsByCourse = filterLessonsByCourse;
+window.reorderLessons = reorderLessons;
+window.loadLessons = loadLessons;
+        // Make functions globally available
+        window.openAddCourseModal = openAddCourseModal;
+        window.closeAddCourseModal = closeAddCourseModal;
+        window.editCourse = editCourse;
+        window.closeEditCourseModal = closeEditCourseModal;
+        window.openDiscountModal = openDiscountModal;
+        window.closeDiscountModal = closeDiscountModal;
+        window.applyDiscount = applyDiscount;
+        window.deleteUser = deleteUser;
+        window.deleteCourse = deleteCourse;
+        window.viewUserCourses = viewUserCourses;
+        window.viewUserPurchases = viewUserPurchases;
+        
+    </script>
+    <div id="addLessonModal" class="modal">
+    <!-- سيتم تعبئته ديناميكياً -->
+</div>
+
+<div id="editLessonModal" class="modal">
+    <!-- سيتم تعبئته ديناميكياً -->
+</div>
+</body>
+</html>
