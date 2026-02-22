@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     // ========== ADMIN CONFIGURATION ==========
     const ADMIN_EMAIL = "admin@gmail.com";
-    const ADMIN_API_BASE = 'https://localhost:44360';
+    const ADMIN_API_BASE = 'http://localhost:5124';
     
     // ========== ADMIN STATE MANAGEMENT ==========
     let isAdmin = false;
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cardsContainerId = 'coursesContainer';
     
     // ========== CONFIGURATION ==========
-    // const ADMIN_API_BASE = 'https://localhost:44360';
+    // const ADMIN_API_BASE = 'http://localhost:5124';
     
     // ========== GLOBAL STATE ==========
     let cart = JSON.parse(localStorage.getItem('cart')) || [];

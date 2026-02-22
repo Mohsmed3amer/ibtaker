@@ -3,7 +3,7 @@
 // ==============================
 // CONFIG
 // ==============================
-const API_BASE_URL = 'https://localhost:44360';
+const API_BASE_URL = 'http://localhost:5124';
 const DEV_MODE = true; // تغيير إلى false للإنتاج
 
 // ==============================
