@@ -78,11 +78,11 @@ function updateCartModal() {
         cartTotalContainer.innerHTML = `
             <div class="total-row">
                 <span>المجموع:</span>
-                <span>0 ريال</span>
+                <span>0 جنيه</span>
             </div>
             <div class="total-row final">
                 <span>الإجمالي:</span>
-                <span>0 ريال</span>
+                <span>0 جنيه</span>
             </div>
         `;
         return;
@@ -100,7 +100,7 @@ function updateCartModal() {
             <img src="${item.image}" alt="${item.title}">
             <div class="cart-item-details">
                 <div class="cart-item-title">${item.title}</div>
-                <div class="cart-item-price">${item.price} ريال</div>
+                <div class="cart-item-price">${item.price} جنيه</div>
             </div>
             <button class="remove-from-cart" data-index="${index}">
                 <i class="fas fa-trash"></i>
@@ -125,11 +125,11 @@ function updateCartModal() {
     cartTotalContainer.innerHTML = `
         <div class="total-row">
             <span>المجموع:</span>
-            <span>${total} ريال</span>
+            <span>${total} جنيه</span>
         </div>
         <div class="total-row final">
             <span>الإجمالي:</span>
-            <span>${total} ريال</span>
+            <span>${total} جنيه</span>
         </div>
     `;
 }

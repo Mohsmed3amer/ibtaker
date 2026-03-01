@@ -78,11 +78,11 @@ function updateCartModal() {
         cartTotalContainer.innerHTML = `
             <div class="total-row">
                 <span>المجموع:</span>
-                <span>0 ريال</span>
+                <span>0 جنيه</span>
             </div>
             <div class="total-row final">
                 <span>الإجمالي:</span>
-                <span>0 ريال</span>
+                <span>0 جنيه</span>
             </div>
         `;
         return;
@@ -100,7 +100,7 @@ function updateCartModal() {
             <img src="${item.image}" alt="${item.title}">
             <div class="cart-item-details">
                 <div class="cart-item-title">${item.title}</div>
-                <div class="cart-item-price">${item.price} ريال</div>
+                <div class="cart-item-price">${item.price} جنيه</div>
             </div>
             <button class="remove-from-cart" data-index="${index}">
                 <i class="fas fa-trash"></i>
@@ -124,11 +124,11 @@ function updateCartModal() {
     cartTotalContainer.innerHTML = `
         <div class="total-row">
             <span>المجموع:</span>
-            <span>${total} ريال</span>
+            <span>${total} جنيه</span>
         </div>
         <div class="total-row final">
             <span>الإجمالي:</span>
-            <span>${total} ريال</span>
+            <span>${total} جنيه</span>
         </div>
     `;
 }
@@ -248,7 +248,7 @@ function displaySearchResults(query) {
                     <h4>${course.title}</h4>
                     <p>${course.description} - ${course.university}</p>
                 </div>
-                <div class="price">${course.price} ريال</div>
+                <div class="price">${course.price} جنيه</div>
             `;
             
             resultItem.addEventListener('click', function() {
@@ -359,7 +359,7 @@ document.querySelectorAll('.add-to-cart-btn').forEach(button => {
     button.addEventListener('click', function() {
         const card = this.closest('.card');
         const title = card.querySelector('h3').textContent;
-        const price = card.querySelector('.card-price span').textContent.replace('ريال', '').trim();
+        const price = card.querySelector('.card-price span').textContent.replace('جنيه', '').trim();
         const image = card.querySelector('img').src;
         
         // Check if item already in cart
@@ -416,7 +416,7 @@ function updateOrderSummary() {
         orderItem.className = 'order-item';
         orderItem.innerHTML = `
             <span>${item.title}</span>
-            <span>${item.price} ريال</span>
+            <span>${item.price} جنيه</span>
         `;
         orderSummary.appendChild(orderItem);
     });
@@ -425,7 +425,7 @@ function updateOrderSummary() {
     orderTotal.className = 'order-total';
     orderTotal.innerHTML = `
         <span>المجموع الكلي:</span>
-        <span class="total">${total} ريال</span>
+        <span class="total">${total} جنيه</span>
     `;
     orderSummary.appendChild(orderTotal);
 }

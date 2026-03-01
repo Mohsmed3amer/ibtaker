@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     // ========== ADMIN CONFIGURATION ==========
     const ADMIN_EMAIL = "admin@gmail.com";
-    const ADMIN_API_BASE = 'http://localhost:5000';
+    const ADMIN_API_BASE = 'https://ibtakr-academy.com';
     
     // ========== ADMIN STATE MANAGEMENT ==========
     let isAdmin = false;
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const cardsContainerId = 'coursesContainer';
     
     // ========== CONFIGURATION ==========
-    // const ADMIN_API_BASE = 'http://localhost:5000';
+    // const ADMIN_API_BASE = 'https://ibtakr-academy.com';
     
     // ========== GLOBAL STATE ==========
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -1418,7 +1418,7 @@ async function buyCourse(courseId) {
                 <p>${course.description || course.Description || 'وصف الكورس'}</p>
                 <p>${course.university || course.University || 'جامعة'}</p>
                 <div class="price">
-                    <span>${course.price || course.Price || '0'} ريال</span>
+                    <span>${course.price || course.Price || '0'} جنيه</span>
                     <button class="add-to-cart">اشترك</button>
                 </div>
             </div>
@@ -1528,11 +1528,11 @@ async function buyCourse(courseId) {
                 cartTotalContainer.innerHTML = `
                     <div class="total-row">
                         <span>المجموع:</span>
-                        <span>0 ريال</span>
+                        <span>0 جنيه</span>
                     </div>
                     <div class="total-row final">
                         <span>الإجمالي:</span>
-                        <span>0 ريال</span>
+                        <span>0 جنيه</span>
                     </div>
                 `;
             }
@@ -1575,11 +1575,11 @@ async function buyCourse(courseId) {
             cartTotalContainer.innerHTML = `
                 <div class="total-row">
                     <span>المجموع:</span>
-                    <span>${total} ريال</span>
+                    <span>${total} جنيه</span>
                 </div>
                 <div class="total-row final">
                     <span>الإجمالي:</span>
-                    <span>${total} ريال</span>
+                    <span>${total} جنيه</span>
                 </div>
             `;
         }
@@ -1964,7 +1964,7 @@ async function buyCourse(courseId) {
                             <h4>${course.title}</h4>
                             <p>${course.description || ''} - ${course.university || ''}</p>
                         </div>
-                        <div class="price">${course.price || '0'} ريال</div>
+                        <div class="price">${course.price || '0'} جنيه</div>
                     `;
                     
                     resultItem.addEventListener('click', function() {

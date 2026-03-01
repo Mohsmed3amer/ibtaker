@@ -1040,8 +1040,8 @@
                 </div>
                 
                 <div class="discount-preview" id="discountPreview">
-                    <div class="original-price" id="originalPrice">200 ريال</div>
-                    <div class="discounted-price" id="discountedPrice">150 ريال</div>
+                    <div class="original-price" id="originalPrice">200 جنيه</div>
+                    <div class="discounted-price" id="discountedPrice">150 جنيه</div>
                     <div style="color: #666; margin-top: 10px;">بعد الخصم</div>
                 </div>
                 
@@ -1061,7 +1061,7 @@
 
     <script>
         // ========== CONFIGURATION ==========
-        const API_BASE_URL = 'http://localhost:5000';
+        const API_BASE_URL = 'https://ibtakr-academy.com';
         const ADMIN_EMAIL = "admin@gmail.com";
         
         // ========== STATE MANAGEMENT ==========
@@ -1224,7 +1224,7 @@
                     <div class="stat-card">
                         <div class="stat-info">
                             <h3>إجمالي المبيعات</h3>
-                            <div class="stat-number" id="totalSales">0 ريال</div>
+                            <div class="stat-number" id="totalSales">0 جنيه</div>
                         </div>
                         <div class="stat-icon">
                             <i class="fas fa-chart-line"></i>
@@ -1302,7 +1302,7 @@
                 // Update stats
                 document.getElementById('totalUsers').textContent = stats?.totalUsers || 0;
                 document.getElementById('totalCourses').textContent = stats?.totalCourses || 0;
-                document.getElementById('totalSales').textContent = (stats?.totalSales || 0) + ' ريال';
+                document.getElementById('totalSales').textContent = (stats?.totalSales || 0) + ' جنيه';
                 document.getElementById('totalPurchases').textContent = stats?.totalPurchases || 0;
                 
                 // Update recent activities
@@ -1584,7 +1584,7 @@
                             </td>
                             <td>${course.title}</td>
                             <td>${course.university}</td>
-                            <td>${course.price} ريال</td>
+                            <td>${course.price} جنيه</td>
                             <td>${course.enrolledCount || 0}</td>
                             <td class="action-buttons">
                                 <button class="btn btn-sm btn-primary" onclick="editCourse('${course.id}')">
@@ -1628,7 +1628,7 @@
                     <div class="stat-card">
                         <div class="stat-info">
                             <h3>إجمالي المبيعات</h3>
-                            <div class="stat-number" id="totalSalesAmount">0 ريال</div>
+                            <div class="stat-number" id="totalSalesAmount">0 جنيه</div>
                         </div>
                         <div class="stat-icon">
                             <i class="fas fa-chart-line"></i>
@@ -1648,7 +1648,7 @@
                     <div class="stat-card">
                         <div class="stat-info">
                             <h3>متوسط سعر الكورس</h3>
-                            <div class="stat-number" id="averagePrice">0 ريال</div>
+                            <div class="stat-number" id="averagePrice">0 جنيه</div>
                         </div>
                         <div class="stat-icon">
                             <i class="fas fa-calculator"></i>
@@ -1764,7 +1764,7 @@ function updateSalesStats(salesSummary) {
     const totalSalesElement = document.getElementById('totalSalesAmount');
     if (totalSalesElement) {
         const totalRevenue = salesSummary?.totalRevenue || 0;
-        totalSalesElement.textContent = totalRevenue > 0 ? totalRevenue + ' ريال' : '0 ريال';
+        totalSalesElement.textContent = totalRevenue > 0 ? totalRevenue + ' جنيه' : '0 جنيه';
     }
     
     // تحديث عدد المشتريات
@@ -1777,7 +1777,7 @@ function updateSalesStats(salesSummary) {
     const averagePriceElement = document.getElementById('averagePrice');
     if (averagePriceElement) {
         const avgPrice = salesSummary?.averageOrderValue || 0;
-        averagePriceElement.textContent = avgPrice > 0 ? avgPrice + ' ريال' : '0 ريال';
+        averagePriceElement.textContent = avgPrice > 0 ? avgPrice + ' جنيه' : '0 جنيه';
     }
     
     // تحديث أفضل كورس مبيعاً
@@ -1948,7 +1948,7 @@ function displayRecentPurchases(purchases) {
             <tr>
                 <td>${userName} ${userEmail ? `<small>(${userEmail})</small>` : ''}</td>
                 <td>${courseTitle}</td>
-                <td>${price} ريال</td>
+                <td>${price} جنيه</td>
                 <td>${formatDate(date)}</td>
             </tr>
         `;
@@ -2114,7 +2114,7 @@ function formatDate(dateString) {
                 select.innerHTML = '<option value="">اختر الكورس</option>';
                 
                 courses.forEach(course => {
-                    select.innerHTML += `<option value="${course.id}" data-price="${course.price}">${course.title} - ${course.price} ريال</option>`;
+                    select.innerHTML += `<option value="${course.id}" data-price="${course.price}">${course.title} - ${course.price} جنيه</option>`;
                 });
                 
             } catch (error) {
@@ -2317,8 +2317,8 @@ function formatDate(dateString) {
                 const price = parseInt(option.getAttribute('data-price')) || 0;
                 const discounted = price - (price * percentage / 100);
                 
-                document.getElementById('originalPrice').textContent = price + ' ريال';
-                document.getElementById('discountedPrice').textContent = discounted + ' ريال';
+                document.getElementById('originalPrice').textContent = price + ' جنيه';
+                document.getElementById('discountedPrice').textContent = discounted + ' جنيه';
             }
         }
 

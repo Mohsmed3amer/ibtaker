@@ -187,7 +187,7 @@ class CheckoutManager {
             orderItem.className = 'order-item';
             orderItem.innerHTML = `
                 <span>${item.title}</span>
-                <span>${item.price} ريال</span>
+                <span>${item.price} جنيه</span>
             `;
             orderSummary.appendChild(orderItem);
         });
