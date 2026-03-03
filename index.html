@@ -1259,6 +1259,38 @@ body, html {
     /* شيل الـ padding ده علشان الفوتر يبدأ من أول الجنب */
     padding: 0;
 }
+/* حاجة جديدة للـ contact */
+.footer-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* عشان يبدأوا من الشمال */
+    width: 100%;
+    max-width: 300px;
+}
+
+.footer-contact-item {
+    display: flex;
+    align-items: left;
+    gap: 10px;
+    margin: 8px 0;
+    direction: ltr; /* عشان رقم التليفون يظهر صح */
+}
+
+.footer-contact-item i {
+    color: var(--gold-dark);
+    font-size: 18px;
+    min-width: 25px;
+}
+
+.footer-contact-item span {
+    color: white;
+    font-size: 14px;
+}
+
+/* للعنصر اللي فيه العنوان (عشان هو عربي) */
+.footer-contact-item:last-child {
+    direction: rtl;
+}
 .footer-logo {
     font-size: 24px;
     font-weight: 800;
@@ -3144,16 +3176,43 @@ body, html {
 <!-- FOOTER -->
 <footer class="footer" id="contact">
     <div class="footer-content">
-        <div class="footer-logo">
-            <img src="./imgs/logoss.png" alt="ابتكر" class="footer-logo-img">
-            <span>ابتكر</span>
+        <!-- حطينا Flex عشان نخلي الشعار على اليمين والكونتاكت على الشمال -->
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 0 20px; flex-wrap: wrap;">
+            
+            <!-- معلومات التواصل (الشمال) -->
+            <div class="footer-contact">
+                <!-- البريد الإلكتروني -->
+                <div class="footer-contact-item">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>ibtakracademy@gmail.com</span>
+                </div>
+                
+                <!-- رقم الهاتف -->
+                <div class="footer-contact-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <span>+201015117547</span>
+                </div>
+                
+                <!-- العنوان -->
+                <div class="footer-contact-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span>مصر. الاسكندرية</span>
+                </div>
+            </div>
+            
+            <!-- الشعار (اليمين) -->
+            <div class="footer-logo">
+                <img src="./imgs/logoss.png" alt="ابتكر" class="footer-logo-img">
+                <span>ابتكر</span>
+            </div>
+            
         </div>
         
+        <!-- باقي الحاجات تحتهم سنتر -->
         <div class="footer-links">
             <a href="#">الرئيسية</a>
             <a href="#about">عن ابتكر</a>
             <a href="#courses">الكورسات</a>
-            
         </div>
         
         <div class="footer-social">
