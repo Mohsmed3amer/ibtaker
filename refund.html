@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سياسة الاسترداد - ابتكر</title>
+    <style>
+        /* same base styles but with slight variations for refund page */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(145deg, #f0f5fb 0%, #e9f0f7 100%);
+            color: #1e2b3a;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .refund-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffffec;
+            backdrop-filter: blur(6px);
+            border-radius: 44px 44px 40px 40px;
+            box-shadow: 0 25px 55px -10px rgba(20, 50, 80, 0.25);
+            overflow: hidden;
+            border: 1px solid rgba(255,215,140,0.5);
+        }
+
+        .refund-header {
+            background: linear-gradient(105deg, #264e6b 0%, #1b3b50 100%);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            border-bottom: 6px solid #f9b81b;
+        }
+
+        .refund-header::before {
+            content: "💰";
+            position: absolute;
+            right: 25px;
+            top: 20px;
+            font-size: 3.3rem;
+            opacity: 0.15;
+            transform: rotate(8deg);
+        }
+
+        .refund-header::after {
+            content: "✓";
+            position: absolute;
+            left: 30px;
+            bottom: 10px;
+            font-size: 5rem;
+            opacity: 0.1;
+            color: white;
+        }
+
+        .refund-header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 4px 10px #00000025;
+        }
+
+        .refund-header .accent {
+            color: #f9b81b;
+            border-bottom: 3px dotted #f9b81b;
+        }
+
+        .refund-header .sub {
+            color: #e2ecf7;
+            font-size: 1.2rem;
+            background: #1d4055;
+            display: inline-block;
+            padding: 0.4rem 2rem;
+            border-radius: 60px;
+            margin-top: 0.8rem;
+            box-shadow: inset 0 -2px 5px #00000015;
+        }
+
+        .update-badge {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        .update-badge span {
+            background: #f9b81b;
+            color: #1f3b4a;
+            font-weight: 700;
+            padding: 0.3rem 2.2rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            border: 2px solid white;
+        }
+
+        .refund-content {
+            padding: 2.5rem 2.8rem;
+        }
+
+        .fairness-box {
+            background: #fef5e7;
+            border-right: 8px solid #f9b81b;
+            padding: 1.6rem;
+            border-radius: 28px;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+            color: #2f4a62;
+            box-shadow: 0 6px 18px #f9b81b20;
+        }
+
+        .fairness-box strong {
+            color: #203f57;
+        }
+
+        .refund-section {
+            margin-bottom: 2.2rem;
+            background: #fbfdff;
+            padding: 1.8rem 2rem;
+            border-radius: 36px;
+            box-shadow: 0 6px 16px #cdddea60;
+            transition: 0.15s;
+            border: 1px solid #dbe8f5;
+        }
+
+        .refund-section:hover {
+            border-color: #f9b81b;
+            box-shadow: 0 12px 22px #c0d0e2;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1.2rem;
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: #1e3a58;
+            border-bottom: 2px solid #f9b81b;
+            padding-bottom: 0.6rem;
+        }
+
+        .section-icon {
+            font-size: 2rem;
+            background: #f9e9cf;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .refund-section ul, .refund-section ol {
+            padding-right: 2rem;
+            margin: 0.8rem 0;
+        }
+
+        .refund-section li {
+            margin-bottom: 0.7rem;
+            font-size: 1.05rem;
+        }
+
+        .badge-success {
+            background: #e0f2e9;
+            color: #0f5530;
+            font-weight: 700;
+            padding: 0.1rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-left: 0.4rem;
+        }
+
+        .badge-warning {
+            background: #fde6d2;
+            color: #a3430c;
+            font-weight: 600;
+            padding: 0.1rem 0.9rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .badge-danger {
+            background: #ffe2e2;
+            color: #aa1e1e;
+            font-weight: 600;
+            padding: 0.2rem 1.2rem;
+            border-radius: 30px;
+            display: inline-block;
+            margin: 0.3rem 0;
+        }
+
+        .number-circle {
+            display: inline-block;
+            background: #1e3f60;
+            color: white;
+            font-weight: 800;
+            width: 26px;
+            height: 26px;
+            text-align: center;
+            line-height: 26px;
+            border-radius: 50%;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+
+        .highlight-note {
+            background: #f2f0d7;
+            padding: 0.2rem 0.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            color: #2c4a6a;
+        }
+
+        .process-card {
+            background: #eef2f8;
+            padding: 1.8rem;
+            border-radius: 34px;
+            margin: 1.8rem 0;
+        }
+
+        .process-step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 40px;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 4px 8px #0000000c;
+        }
+
+        .step-num {
+            background: #f9b81b;
+            color: #1e2e3f;
+            font-weight: 900;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 1.2rem;
+        }
+
+        .contact-refund {
+            background: #1f3f5c;
+            color: white;
+            padding: 2rem;
+            border-radius: 40px;
+            margin-top: 2.8rem;
+            text-align: center;
+            border: 3px solid #f9b81b;
+            box-shadow: 0 16px 24px #16354d70;
+        }
+
+        .contact-refund .email {
+            background: #f9b81b;
+            color: #1d3d57;
+            padding: 1rem 2rem;
+            border-radius: 60px;
+            font-size: 1.5rem;
+            font-weight: 800;
+            direction: ltr;
+            display: inline-block;
+            margin: 0.8rem 0;
+            border: 2px solid white;
+        }
+
+        .refund-footer {
+            background: #e2ebf5;
+            padding: 1.5rem;
+            text-align: center;
+            color: #2a4e6e;
+            border-top: 2px solid #f9b81b;
+        }
+
+        @media (max-width: 600px) {
+            .refund-header h1 { font-size: 2.2rem; }
+            .refund-content { padding: 1.5rem 1.2rem; }
+            .section-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="refund-container">
+        <div class="refund-header">
+            <h1>سياسة <span class="accent">الاسترداد</span></h1>
+            <div class="sub">شفافية وعناية بمصلحتك</div>
+            <div class="update-badge"><span>📅 آخر تحديث: 2 مارس 2026</span></div>
+        </div>
+
+        <div class="refund-content">
+            <div class="fairness-box">
+                <strong>في منصة ابتكر،</strong> هدفنا هو مساعدتك على فهم المواد الدراسية بسهولة وتحقيق أهدافك الأكاديمية والمهنية، ولذلك وضعنا سياسة استرداد شفافة وعادلة تراعي مصلحتك كطالب.
+            </div>
+
+            <!-- 1. فترة السماح -->
+            <div class="refund-section">
+                <div class="section-title">
+                    <span class="section-icon">⏳</span>
+                    <span>فترة السماح والشروط</span>
+                </div>
+                <p>نظراً لأن منتجاتنا تعليمية رقمية (شروحات فيديو، ملفات) ويمكن استهلاكها فوراً، فإننا نمنحك فترة:</p>
+                <div style="background:#e2f0fa; font-size:2.2rem; font-weight:900; padding:0.5rem 1rem; border-radius:50px; display:inline-block; margin:0.8rem 0; color:#17507d;">⏱️ 48 ساعة</div>
+                <p>من تاريخ عملية الشراء لطلب استرداد المبلغ، مع شرطين أساسيين:</p>
+                <ul>
+                    <li><span class="badge-success">شرط 1</span> ألا تتجاوز نسبة المشاهدة للدروس <strong>5%</strong> من إجمالي محتوى الكورس (مثل كورس "محاسبة متوسطة").</li>
+                    <li><span class="badge-success">شرط 2</span> ألا تكون قد قمت بتحميل أي من المواد التعليمية المرفقة (إن وجدت).</li>
+                </ul>
+                <p>هذه الفترة تمنحك فرصة كافية للتأكد من أن الكورس هو ما تبحث عنه، مع حماية حق المنصة في المحتوى الذي تقدمه.</p>
+            </div>
+
+            <!-- 2. متى لا يتم الاسترداد -->
+            <div class="refund-section">
+                <div class="section-title">
+                    <span class="section-icon">🚫</span>
+                    <span>متى لا يمكن استرداد المبلغ؟</span>
+                </div>
+                <ul>
+                    <li><span class="badge-danger">ممنوع</span> تجاوز مدة <strong>48 ساعة</strong> من تاريخ الشراء.</li>
+                    <li><span class="badge-danger">ممنوع</span> تجاوز نسبة المشاهدة المسموح بها (5%) أو تحميل المحتوى.</li>
+                    <li><span class="badge-danger">ممنوع</span> تغيير الرأي بعد استهلاك جزء كبير من المحتوى.</li>
+                    <li><span class="badge-danger">ممنوع</span> عدم توافق أجهزتك أو سرعة الإنترنت لديك مع متطلبات المنصة (يُرجى التأكد عبر التجربة المجانية).</li>
+                    <li><span class="badge-danger">ممنوع</span> إذا كان الكورس ضمن عروض خاصة أو بخصم نهائي غير قابل للاسترداد.</li>
+                    <li><span class="badge-danger">ممنوع</span> في حال اكتشاف أي نشاط غير طبيعي أو مخالف لحقوق الملكية (مثل مشاركة الحساب)، مما قد يؤدي إلى حظر الحساب دون استرداد.</li>
+                </ul>
+            </div>
+
+            <!-- 3. حالات خاصة للاستثناء -->
+            <div class="refund-section">
+                <div class="section-title">
+                    <span class="section-icon">🆘</span>
+                    <span>حالات خاصة نقبل فيها الاسترداد بعد المدة</span>
+                </div>
+                <p>نحن في <strong>ابتكر</strong> نقدر ظروفك، ولذلك ندرس الطلبات خارج المدة فقط في حالات استثنائية مثل:</p>
+                <div style="background:#e7f4ea; padding:1.3rem; border-radius:30px; margin:1rem 0;">
+                    <p><span class="highlight-note">🔧 خلل تقني من جانبنا:</span> إذا واجهت مشكلة تقنية تمنعك من الوصول للمحتوى بالكامل، ولم نتمكن من حلها خلال <strong>48 ساعة</strong> من تاريخ إبلاغك لنا.</p>
+                </div>
+                <div style="background:#f3ecf3; padding:1.3rem; border-radius:30px;">
+                    <p><span class="highlight-note">💳 دفع مكرر:</span> إذا تم خصم قيمة الكورس من حسابك مرتين بالخطأ.</p>
+                </div>
+            </div>
+
+            <!-- 4. آلية الاسترداد -->
+            <div class="refund-section">
+                <div class="section-title">
+                    <span class="section-icon">🔄</span>
+                    <span>آلية استرداد المبلغ</span>
+                </div>
+                <div class="process-card">
+                    <div class="process-step">
+                        <span class="step-num">1</span>
+                        <span>إذا تمت الموافقة على طلب الاسترداد، سيتم إرجاع المبلغ إلى نفس وسيلة الدفع التي استخدمتها (بطاقة ائتمان، محفظة إلكترونية، الخ).</span>
+                    </div>
+                    <div class="process-step">
+                        <span class="step-num">2</span>
+                        <span>قد تستغرق العملية من <strong>7 إلى 14 يوم عمل</strong> حسب الإجراءات المتبعة في البنك أو شركة الدفع.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. كيفية طلب الاسترداد -->
+            <div class="refund-section">
+                <div class="section-title">
+                    <span class="section-icon">✍️</span>
+                    <span>كيف تطلب استرداد المبلغ؟</span>
+                </div>
+                <p>لبدء الإجراء، يرجى التواصل مع فريق الدعم عبر البريد الإلكتروني مع ذكر:</p>
+                <ul>
+                    <li><strong>الاسم الكامل</strong> والبريد الإلكتروني المسجل بهما في المنصة.</li>
+                    <li><strong>اسم الكورس</strong> المشترك فيه وتاريخ الشراء.</li>
+                    <li><strong>سبب الطلب</strong> بوضوح.</li>
+                </ul>
+                <p>سيقوم فريقنا بمراجعة طلبك والرد عليك في أقرب وقت ممكن، لأنك معنا في كل مرحلة من مراحل التعلم.</p>
+            </div>
+
+            <!-- contact card -->
+            <div class="contact-refund">
+                <h2 style="font-size:2rem; margin-bottom:0.5rem;">📧 تواصل معنا للدعم</h2>
+                <p>أرسل طلب استرداد أو استفسار إلى</p>
+                <div class="email">ibtakracademy@gmail.com</div>
+                <p style="margin-top:1rem; color:#f9e2a5;">نحن هنا لمساعدتك 💙</p>
+            </div>
+        </div>
+
+        <div class="refund-footer">
+            © 2026 منصة ابتكر - تعلم بذكاء. جميع الحقوق محفوظة.
+        </div>
+    </div>
+</body>
+</html>
